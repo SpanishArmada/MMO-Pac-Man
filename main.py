@@ -19,11 +19,17 @@ class MainHandler(tornado.web.RequestHandler):
         self.render("index1.html")
 
 class SocketHandler(tornado.websocket.WebSocketHandler):
+    def check_origin(self, origin):
+        return True
     def open(self):
         global counter
         if(self not in data):
             data.append(self)
-            msg = {"type": 0, "player_id": counter + 1}
+            counter += 1
+            player_x = 1
+            player_y = 1
+            players.append(Player(GE, counter, "dummy_name", player_x, player_y))
+            msg = {"type": 0, "player_id": counter, "x": player_x, "y": player_y}
             self.write_message(msg)
             
     def on_message(self, msg):
@@ -37,8 +43,13 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             player_id = incoming_data["player_id"]
             player_name = incoming_data["player_name"]
 
-            counter += 1
-            players.append(Player(GE, counter, player_name, 1, 1))
+            p = None
+            for x in players:
+                if x.get_id() == player_id:
+                    x.name = player_name
+                    p = x
+                    break
+                    
             left_boundary = col - 9
             right_boundary = col + 9
             top_boundary = row - 16
@@ -74,11 +85,6 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                     ghost_pos[str(i.get_id())] = {"x": i.get_x(), "y": i.get_y(), "orientation": i.orientation, "ghost_type": i.ghost_type}
 
             print(len(players))
-            p = None
-            for x in players:
-                if x.get_id() == player_id:
-                    p = x
-                    break
             data = {"type": 1, "grids": grids, "pac_pos": pac_pos, "ghost_pos": ghost_pos, "food_pos": food_pos, "score": p.get_score()}
             self.write_message(data)
         else:
