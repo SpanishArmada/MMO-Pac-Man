@@ -163,7 +163,15 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                     ghost_pos[str(i.get_id())] = {"x": i.get_x(), "y": i.get_y(), "orientation": i.orientation, "ghost_type": i.ghost_type}
             
             if(p.is_dead):
+                GE.delete_player(p.get_id())
+                global list_of_clients
+                for i in list_of_clients:
+                    if(i[0] == self):
+                        self.callback.stop()
+                        list_of_clients.remove(i)
+                        break
                 data = {"type": 2}
+                
             else:
                 data = {"type": 1, "grids": grids, "pac_pos": pac_pos, "ghost_pos": ghost_pos, "food_pos": food_pos, "score": p.get_score()}
             self.write_message(data)
