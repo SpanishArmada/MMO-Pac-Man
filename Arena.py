@@ -24,6 +24,8 @@ class Arena:
 
         self.__emptied_grids = {}
 
+        self.__init_power_up_spawn_chance = 0.001
+
     def __getitem__(self, p):
         # I strictly expect that parameter 'p' is a tuple of two
         return self.grids[p[1]][p[0]]
@@ -111,9 +113,12 @@ class Arena:
             for j in range(self.width):
                 if self[i, j].get_type() == Grid.EMPTY:
                     self[i, j].set_type(Grid.PILL)
+                    
+                    if random.random() < self.__init_power_up_spawn_chance:
+                        self[i, j].set_type(Grid.POWER_UP)
         
         return True
-    
+
     def get_grid(self, x, y):
         return self.grids[y][x]
 
