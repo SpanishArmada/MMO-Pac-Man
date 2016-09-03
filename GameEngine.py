@@ -86,11 +86,11 @@ class GameEngine:
         raise Exception("Not implemented!")
 
     def delete_player(self, pid):
-        p = players[pid]
-        self.arena[p.x, p.y].lift(self)
+        p = self.players[pid]
+        self.arena.lift(p)
         del self.players[pid]
 
     def delete_ghost(self, gid):
         g = ghosts[gid]
-        self.arena[g.x, g.y].lift(self)
+        self.arena.lift(g)
         del self.ghosts[gid]

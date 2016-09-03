@@ -54,7 +54,8 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                 if player.get_id() == player_id:
                     p = player
                     break
-            
+            if(p == None):
+                continue
             row = p.get_y()
             col = p.get_x()
 
@@ -118,64 +119,64 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                     player.name = player_name
                     p = player
                     break
+            if(p != None):
+                row = p.get_y()
+                col = p.get_x()
 
-            row = p.get_y()
-            col = p.get_x()
-
-            left_boundary = col - 16
-            right_boundary = col + 16
-            top_boundary = row - 9
-            bottom_boundary = row + 9
-            local_grids = GE.get_arena().grids[top_boundary:bottom_boundary+1]
-            
-            if(arrow != 4):
-                p.pressed_arrow_key(arrow)
-
-            grids = []
-            food_pos = []
-            power_up_pos = []
-            for i in local_grids:
-                current_row = i[left_boundary:right_boundary]
-                r = []
-                for j in current_row:
-                    if(j.get_type() == 4):
-                        r.append(1)
-                    else:
-                        r.append(0)
-                    if(j.get_type() == 1):
-                        food_pos.append({"x": j.get_x(), "y": j.get_y()})
-                    if(j.get_type() == 2):
-                        power_up_pos.append({"x": j.get_x(), "y": j.get_y()})
-                grids.append(r)
+                left_boundary = col - 16
+                right_boundary = col + 16
+                top_boundary = row - 9
+                bottom_boundary = row + 9
+                local_grids = GE.get_arena().grids[top_boundary:bottom_boundary+1]
                 
-            pac_pos = dict()
-            ghost_pos = dict()
-            for i in GE.get_players():
-                player_row = i.get_y()
-                player_col = i.get_x()
-                if(left_boundary <= player_col <= right_boundary and top_boundary <= player_row <= bottom_boundary):
-                    pac_pos[str(i.get_id())] = {"x": i.get_x(), "y": i.get_y(), "orientation": i.orientation, "player_name": i.name}
-            #print(left_boundary, right_boundary, top_boundary, bottom_boundary)
-            for i in GE.get_ghosts():
-                ghost_row = i.get_y()
-                ghost_col = i.get_x()
-                if(left_boundary <= ghost_col <= right_boundary and top_boundary <= ghost_row <= bottom_boundary):
+                if(arrow != 4):
+                    p.pressed_arrow_key(arrow)
+
+                grids = []
+                food_pos = []
+                power_up_pos = []
+                for i in local_grids:
+                    current_row = i[left_boundary:right_boundary]
+                    r = []
+                    for j in current_row:
+                        if(j.get_type() == 4):
+                            r.append(1)
+                        else:
+                            r.append(0)
+                        if(j.get_type() == 1):
+                            food_pos.append({"x": j.get_x(), "y": j.get_y()})
+                        if(j.get_type() == 2):
+                            power_up_pos.append({"x": j.get_x(), "y": j.get_y()})
+                    grids.append(r)
                     
-                    ghost_pos[str(i.get_id())] = {"x": i.get_x(), "y": i.get_y(), "orientation": i.orientation, "ghost_type": i.ghost_type}
-            
-            if(p.is_dead):
-                # GE.delete_player(p.get_id())
-                global list_of_clients
-                for i in list_of_clients:
-                    if(i[0] == self):
-                        self.callback.stop()
-                        list_of_clients.remove(i)
-                        break
-                data = {"type": 2}
+                pac_pos = dict()
+                ghost_pos = dict()
+                for i in GE.get_players():
+                    player_row = i.get_y()
+                    player_col = i.get_x()
+                    if(left_boundary <= player_col <= right_boundary and top_boundary <= player_row <= bottom_boundary):
+                        pac_pos[str(i.get_id())] = {"x": i.get_x(), "y": i.get_y(), "orientation": i.orientation, "player_name": i.name}
+                #print(left_boundary, right_boundary, top_boundary, bottom_boundary)
+                for i in GE.get_ghosts():
+                    ghost_row = i.get_y()
+                    ghost_col = i.get_x()
+                    if(left_boundary <= ghost_col <= right_boundary and top_boundary <= ghost_row <= bottom_boundary):
+                        
+                        ghost_pos[str(i.get_id())] = {"x": i.get_x(), "y": i.get_y(), "orientation": i.orientation, "ghost_type": i.ghost_type}
                 
-            else:
-                data = {"type": 1, "grids": grids, "pac_pos": pac_pos, "ghost_pos": ghost_pos, "food_pos": food_pos, "score": p.get_score(), "power_up_pos": power_up_pos}
-            self.write_message(data)
+                if(p.is_dead):
+                    # GE.delete_player(p.get_id())
+                    global list_of_clients
+                    for i in list_of_clients:
+                        if(i[0] == self):
+                            self.callback.stop()
+                            list_of_clients.remove(i)
+                            break
+                    data = {"type": 2}
+                    
+                else:
+                    data = {"type": 1, "grids": grids, "pac_pos": pac_pos, "ghost_pos": ghost_pos, "food_pos": food_pos, "score": p.get_score(), "power_up_pos": power_up_pos}
+                self.write_message(data)
         else:
             # closed
             player_id = incoming_data["player_id"]
@@ -185,16 +186,16 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                 if x.get_id() == player_id:
                     p = x
                     break
+            if(p != None):
+                if not p.is_dead:
+                    GE.delete_player(p.get_id())
 
-            if not p.is_dead:
-                GE.delete_player(p.get_id())
-
-            global list_of_clients
-            for i in list_of_clients:
-                if(i[0] == self):
-                    self.callback.stop()
-                    list_of_clients.remove(i)
-                    break
+                global list_of_clients
+                for i in list_of_clients:
+                    if(i[0] == self):
+                        self.callback.stop()
+                        list_of_clients.remove(i)
+                        break
 
     def on_close(self):
         global list_of_clients
