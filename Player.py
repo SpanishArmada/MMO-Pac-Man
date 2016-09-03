@@ -70,18 +70,18 @@ class Player:
 
         if self.powered_up:
             for obj in arr:
-                obj_new_x, obj_new_y = obj.get_next_x(), obj.get_new_y()
+                obj_new_x, obj_new_y = obj.get_next_x(), obj.get_next_y()
                 if type(obj) == Player:
                     if obj.is_powered_up:
                         continue
                     elif obj.has_moved:
-                        self.add_score(OTHER_PLAYER)
+                        self.add_score(Player.OTHER_PLAYER)
                         obj.is_dead = True
                     elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
-                        self.add_score(OTHER_PLAYER)
+                        self.add_score(Player.OTHER_PLAYER)
                         obj.is_dead = True
                 elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
-                    self.add_score(GHOST)
+                    self.add_score(Player.GHOST)
                     obj.is_dead = True
         else:
             for obj in arr:
@@ -90,10 +90,10 @@ class Player:
                     if not obj.is_powered_up:
                         continue
                     elif obj.has_moved:
-                        obj.add_score(OTHER_PLAYER)
+                        obj.add_score(Player.OTHER_PLAYER)
                         self.is_dead = True
                     elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
-                        obj.add_score(OTHER_PLAYER)
+                        obj.add_score(Player.OTHER_PLAYER)
                         self.is_dead = True
                 elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
                     self.is_dead = True

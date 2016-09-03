@@ -37,21 +37,27 @@ class GameEngine:
             # print("Pentium")
             ghost.update()
 
+        players_to_delete = []
         for player in self.players.values():
             if player.is_dead:
-                self.delete_player(player.id)
+                players_to_delete.append(player)
+        for player in players_to_delete:
+            self.delete_player(player.id)
 
+        ghost_to_delete = []
         for ghost in self.ghosts.values():
             if ghost.is_dead:
-                self.delete_ghost(ghost.id)
+                ghost_to_delete.append(ghost)
+        for ghost in ghost_to_delete:
+            self.delete_ghost(ghost.id)
 
         self.arena.late_update()
 
-    def start(self):
-        self.__timer.start()
+    # def start(self):
+    #     self.__timer.start()
 
-    def stop(self):
-        self.__timer.cancel()
+    # def stop(self):
+    #     self.__timer.cancel()
 
     def get_arena(self):
         return self.arena
@@ -91,6 +97,6 @@ class GameEngine:
         del self.players[pid]
 
     def delete_ghost(self, gid):
-        g = ghosts[gid]
+        g = self.ghosts[gid]
         self.arena.lift(g)
         del self.ghosts[gid]
