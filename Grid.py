@@ -1,25 +1,23 @@
 class Grid:
 
-    x = -1
-    y = -1
-    typ = 0
 
     def __init__(self, x=-1, y=-1):
         self.x = x
         self.y = y
+        self.typ = 0
 
-    def get_x(self):
+    def getX(self):
         return self.x
 
-    def get_y(self):
+    def getY(self):
         return self.y
 
-    def get_typ(self):
+    def getTyp(self):
         return self.typ
 
-    def set_pos(self, x, y):
+    def setPos(self, x, y):
         self.x = x
         self.y = y
 
-    def set_typ(self, typ):
+    def setTyp(self, typ):
         self.typ = typ

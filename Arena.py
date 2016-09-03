@@ -1,16 +1,15 @@
-import Grid
-import GameEngine
+from Grid import Grid
+from GameEngine import GameEngine
 
 class Arena:
 
     #Attribute
-    grids = []
-    game_engine = None
 
     #Method
 
     def __init__(self, game_engine, x, y):
         self.game_engine = game_engine
+        self.grids = []
         for i in range(x):
             for i in range(y):
                 self.grids = Grid(x,y)
