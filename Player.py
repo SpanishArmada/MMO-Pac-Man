@@ -41,7 +41,7 @@ class Player:
         new_x = get_next_x()
         new_y = get_next_y()
 
-        if(self.game_engine.get_arena().get_grid(new_x, new_y).get_grid().get_typ() == 4):
+        if(self.game_engine.get_arena().get_grid(new_x, new_y).get_typ() == 4):
             return False
         else:
             return True
@@ -66,10 +66,11 @@ class Player:
         new_x = get_next_x()
         new_y = get_next_y()
         new_grid  = self.game_engine.get_arena().get_grid(new_x, new_y)
-        if(new_grid == 1 or new_grid == 3):
-            calculate_score(new_grid)
-        elif(new_grid ==2):
-            self.power_up
+        if(new_grid.get_typ() == 1 or new_grid.get_typ() == 3):
+            calculate_score(new_grid.get_typ())
+        elif(new_grid.get_typ() == 2):
+            self.power_up = True
+        new_grid.set_typ(0);
         return False
 
     def calculate_score(self, additional):
