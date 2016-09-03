@@ -63,68 +63,58 @@ class Player:
         next_x = self.get_next_x()
         next_y = self.get_next_y()
         new_grid = arena[next_x, next_y]
+        arr = filter(new_grid.get_objects_on_top(), lambda obj: return self != obj)
 
-        if new_grid.get_type() == Grid.WALL:
-            # Immediately recognize that this player has moved
-            self.has_moved = True
-            return
-        
         if powered_up:
-            for obj in new_grid.get_objects_on_top():
-                obj_new_x = obj.get_next_x()
-                obj_new_y = obj.get_next_y()
+            for obj in arr:
+                obj_new_x, obj_new_y = obj.get_next_x(), obj.get_new_y()
                 if type(obj) == Player:
                     if obj.is_powered_up:
                         continue
                     elif obj.has_moved:
                         self.calculate_score(7)
-                    elif ((obj_new_x == next_x) and (obj_new_y == next_y)) or ((obj_new_x == self.x) and (obj_new_y == self.y)):
+                    elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
                         self.calculate_score(7)
-                elif ((obj_new_x == next_x) and (obj_new_y == next_y)) or ((obj_new_x == self.x) and (obj_new_y == self.y)):
+                elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
                     self.calculate_score(5)
         else:
-            for obj in new_grid.get_objects_on_top():
-                obj_new_x = obj.get_next_x()
-                obj_new_y = obj.get_next_y()
+            for obj in arr:
+                obj_new_x, obj_new_y = obj.get_next_x(), obj.get_new_y()
                 if type(obj) == Player:
                     if not obj.is_powered_up:
                         continue
                     elif obj.has_moved:
                         obj.calculate_score(7)
                         self.is_dead = True
-                    elif ((obj_new_x == next_x) and (obj_new_y == next_y)) or ((obj_new_x == self.x) and (obj_new_y == self.y)):
+                    elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
                         obj.calculate_score(7)
                         self.is_dead = True
-                elif ((obj_new_x == next_x) and (obj_new_y == next_y)) or ((obj_new_x == self.x) and (obj_new_y == self.y)):
+                elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
                     self.is_dead = True
 
         if not self.is_dead:
-            if (new_grid.get_type() == Grid.PILL) or (new_grid.get_type() == Grid.CHERRY):    
-                self.calculate_score(new_grid.get_type())
-            elif new_grid.get_type() == Grid.POWER_UP:
+            T = new_grid.consume()
+            if T == Grid.PILL or T == Grid.CHERRY:    
+                self.calculate_score(T)
+            elif T == Grid.POWER_UP:
                 self.powered_up = True
                 self.power_duration = 20
 
-            new_grid.consume()
             self.has_moved = True
             self.x = next_x
             self.y = next_y
     
-    def final_update(self):
+    def early_update(self):
         self.has_moved = False
-        if powered_up:
-            self.power_duration -= 1
+        self.power_duration = max(0, self.power_duration - 1)
+        self.powered_up = self.power_duration > 0
 
-        if self.power_duration == 0:
-            self.powered_up = False
-
-
-    def calculate_score(self, additional):
-        if additional == 1:
+    def calculate_score(self, case):
+        if case == Grid.PILL:
             self.score += 10
-        elif additional == 3:
+        elif case == Grid.CHERRY:
             self.score += 100
-        elif additional == 5:
+        elif case == 5:
             self.score += 200
-        elif additional == 7:
+        elif case == 7:
             self.score += 400
