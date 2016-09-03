@@ -30,28 +30,39 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             
     def on_message(self, msg):
         incomingData = json.loads(msg)
-        row = incomingData["row"]
-        col = incomingData["col"]
-        playerID = incomingData["playerID"]
+        msgType = incomingData["type"]
+        print(msgType)
+        if(msgType == 0):
+            row = incomingData["row"]
+            col = incomingData["col"]
+            playerID = incomingData["playerID"]
 
-        grids = []
-        pacPos = dict()
-        ghostPos = dict()
-        for i in players:
-            pacPos[str(i.get_id())] = (i.get_x(), i.get_y())
-        for i in ghosts:
-            ghostPos[str(i.get_id())] = (i.get_x(), i.get_y())
-         
-        print(len(players))
-        print(len(ghosts))
-        print(ghosts[15].get_x())
-        # TODO: send back player id and score
-        for x in players:
-            if x.get_id() == playerID:
-                p = x
-                break
-        data = {"type": 1, "grids": grids, "pacPos": pacPos, "ghostPos": ghostPos, "score": p.calculate_score()}
-        self.write_message(data)
+            grids = []
+            pacPos = dict()
+            ghostPos = dict()
+            for i in players:
+                pacPos[str(i.get_id())] = (i.get_x(), i.get_y())
+            for i in ghosts:
+                ghostPos[str(i.get_id())] = (i.get_x(), i.get_y())
+            print(len(players))
+            p = None
+            for x in players:
+                if x.get_id() == playerID:
+                    p = x
+                    break
+            data = {"type": 1, "grids": grids, "pacPos": pacPos, "ghostPos": ghostPos, "score": p.get_score()}
+            self.write_message(data)
+        else:
+            # closed
+            print("in")
+            playerID = incomingData["playerID"]
+            print("delete", playerID)
+            p = None
+            for x in players:
+                if x.get_id() == playerID:
+                    p = x
+                    break
+            players.remove(p)
 
     def on_close(self):
         if self in data:
