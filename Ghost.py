@@ -23,22 +23,24 @@ class Ghost:
     def get_id(self):
         return self.id
     
-    def get_next_x(self, orientation=self.orientation):
-        if self.orientation == 0:
+    def get_next_x(self):
+        arena = self.game_engine.arena
+        if self.orientation == 0 and arena[self.x - 1, self.y].get_type() != Grid.WALL:
             return self.x - 1
-        elif self.orientation == 2:
+        elif self.orientation == 2 and arena[self.x + 1, self.y].get_type() != Grid.WALL:
             return self.x + 1
         return self.x
     
     def get_next_y(self):
-        if self.orientation == 1:
+        arena = self.game_engine.arena
+        if self.orientation == 1 and arena[self.x, self.y - 1].get_type() != Grid.WALL:
             return self.y - 1
-        elif self.orientation == 3:
+        elif self.orientation == 3 and arena[self.x, self.y + 1].get_type() != Grid.WALL:
             return self.y + 1
         return self.y
 
     def update(self):
-        arena = self.game_engine.get_arena()
+        arena = self.game_engine.arena
         next_x = self.get_next_x()
         next_y = self.get_next_y()
         new_grid = arena[next_x, next_y]
@@ -70,10 +72,10 @@ class Ghost:
         arena = self.game_engine.arena
 
         possible_direction = []
-        for dir in range(0, 4):
-            self.orientation = dir
-            new_x, new_y = self.get_new_x(), self.get_new_y()
-            if x, y != new_x, new_y:
-                possible_direction.append(dir)
+        for direction in range(0, 4):
+            self.orientation = direction
+            new_x, new_y = self.get_next_x(), self.get_next_y()
+            if self.x != new_x or self.y != new_y:
+                possible_direction.append(direction)
         
         self.orientation = random.choice(possible_direction)

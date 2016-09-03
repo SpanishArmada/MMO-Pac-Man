@@ -22,7 +22,7 @@ class GameEngine:
         self.__timer.start()
         
         for player in self.players.values():
-            print("Gede")
+            # print("Gede")
             player.early_update()
         
         for ghost in self.ghosts.values():
@@ -32,11 +32,11 @@ class GameEngine:
         print("self.players are %s" % self.players)
 
         for player in self.players.values():
-            print("Bayu")
+            # print("Bayu")
             player.update()
 
         for ghost in self.ghosts.values():
-            print("Pentium")
+            # print("Pentium")
             ghost.update()
 
         self.arena.late_update()
