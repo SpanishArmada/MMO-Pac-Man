@@ -45,7 +45,7 @@ class Player:
         new_x = get_next_x()
         new_y = get_next_y()
 
-        if(self.game_engine.get_arena().get_grid(new_x, new_y).get_type() == WALL):
+        if(self.game_engine.get_arena().get_grid(new_x, new_y).get_type() == Grid.WALL):
             return False
         else:
             return True
@@ -82,7 +82,7 @@ class Player:
         if powered_up:
             for obj in new_grid.get_objects_on_top():
                 if (type(obj) == Ghost) or (obj.is_powered_up() == False):
-
+                    return False
                     #check orientation
 
     
