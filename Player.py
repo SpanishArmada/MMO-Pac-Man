@@ -3,6 +3,7 @@ from Grid import Grid
 class Player:
     #Attribute
     PILL = Grid.PILL
+    POWER_UP = Grid.POWER_UP
     CHERRY = Grid.CHERRY
     GHOST = 10
     OTHER_PLAYER = 11
@@ -15,6 +16,7 @@ class Player:
         self.y = y
         self.orientation = 0
         self.score = 0
+        self.ghost_score = 200
         self.powered_up = False
         self.power_duration = 0
         self.has_moved = False
@@ -76,13 +78,13 @@ class Player:
                     if obj.is_powered_up:
                         continue
                     elif obj.has_moved:
-                        self.add_score(Player.OTHER_PLAYER)
+                        self.add_score(OTHER_PLAYER)
                         obj.is_dead = True
                     elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
-                        self.add_score(Player.OTHER_PLAYER)
+                        self.add_score(OTHER_PLAYER)
                         obj.is_dead = True
                 elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
-                    self.add_score(Player.GHOST)
+                    self.add_score(GHOST)
                     obj.is_dead = True
         else:
             for obj in arr:
@@ -91,10 +93,10 @@ class Player:
                     if not obj.is_powered_up:
                         continue
                     elif obj.has_moved:
-                        obj.add_score(Player.OTHER_PLAYER)
+                        obj.add_score(OTHER_PLAYER)
                         self.is_dead = True
                     elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
-                        obj.add_score(Player.OTHER_PLAYER)
+                        obj.add_score(OTHER_PLAYER)
                         self.is_dead = True
                 elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
                     self.is_dead = True
@@ -105,6 +107,7 @@ class Player:
                 self.add_score(T)
             elif T == Grid.POWER_UP:
                 self.powered_up = True
+                self.ghost_score = 200
                 self.power_duration = 20
 
         self.has_moved = True
@@ -117,11 +120,14 @@ class Player:
         self.powered_up = self.power_duration > 0
 
     def add_score(self, case):
-        if case == Player.PILL:
+        if case == PILL:
             self.score += 10
-        elif case == Player.CHERRY:
+        elif case == POWER_UP:
+            self.score += 50
+        elif case == CHERRY:
             self.score += 100
-        elif case == Player.GHOST:
-            self.score += 200
-        elif case == Player.OTHER_PLAYER:
+        elif case == GHOST:
+            self.score += self.ghost_score
+            self.ghost_score *= 2
+        elif case == OTHER_PLAYER:
             self.score += 400

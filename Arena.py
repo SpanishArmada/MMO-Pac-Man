@@ -22,6 +22,8 @@ class Arena:
         self.generate()
         print("done")
 
+        self.__emptied_grids = {}
+
     def __getitem__(self, p):
         # I strictly expect that parameter 'p' is a tuple of two
         return self.grids[p[1]][p[0]]
@@ -115,14 +117,19 @@ class Arena:
     def get_grid(self, x, y):
         return self.grids[y][x]
 
-    def update(self):
-        pass
+    def late_update(self):
+        for (x, y), t in self.__emptied_grid.items():
+            if t <= 0:
+                self[x, y].set_type(Grid.PILL)
+                del self.__emptied_grid[x, y]
+            else:
+                self.__emptied_grid[x, y] = t - 1
     
     def take(self, x, y):
         T = self[x, y].consume()
 
         # If recently emptied
         if T != Grid.EMPTY and self[x, y].get_type() == Grid.EMPTY:
-            pass
+            self.__emptied_grid[x, y] = random.randint(100, 200)
 
         return T
