@@ -3,7 +3,6 @@ from Grid import Grid
 class Player:
     #Attribute
     PILL = Grid.PILL
-    POWER_UP = Grid.POWER_UP
     CHERRY = Grid.CHERRY
     GHOST = 10
     OTHER_PLAYER = 11
@@ -16,7 +15,6 @@ class Player:
         self.y = y
         self.orientation = 0
         self.score = 0
-        self.ghost_score = 200
         self.powered_up = False
         self.power_duration = 0
         self.has_moved = False
@@ -49,17 +47,17 @@ class Player:
 
     def get_next_x(self):
         arena = self.game_engine.arena
-        if self.orientation == 1 and arena[self.x - 1, self.y].get_type() != Grid.WALL:
+        if self.orientation == 0 and arena[self.x - 1, self.y].get_type() != Grid.WALL:
             return self.x - 1
-        elif self.orientation == 3 and arena[self.x + 1, self.y].get_type() != Grid.WALL:
+        elif self.orientation == 2 and arena[self.x + 1, self.y].get_type() != Grid.WALL:
             return self.x + 1
         return self.x
     
     def get_next_y(self):
         arena = self.game_engine.arena
-        if self.orientation == 0 and arena[self.x, self.y - 1].get_type() != Grid.WALL:
+        if self.orientation == 1 and arena[self.x, self.y - 1].get_type() != Grid.WALL:
             return self.y - 1
-        elif self.orientation == 2 and arena[self.x, self.y + 1].get_type() != Grid.WALL:
+        elif self.orientation == 3 and arena[self.x, self.y + 1].get_type() != Grid.WALL:
             return self.y + 1
         return self.y
 
@@ -107,7 +105,6 @@ class Player:
                 self.add_score(T)
             elif T == Grid.POWER_UP:
                 self.powered_up = True
-                self.ghost_score = 200
                 self.power_duration = 20
 
         self.has_moved = True
@@ -122,12 +119,9 @@ class Player:
     def add_score(self, case):
         if case == PILL:
             self.score += 10
-        elif case == POWER_UP:
-            self.score += 50
         elif case == CHERRY:
             self.score += 100
         elif case == GHOST:
-            self.score += self.ghost_score
-            self.ghost_score *= 2
+            self.score += 200
         elif case == OTHER_PLAYER:
             self.score += 400
