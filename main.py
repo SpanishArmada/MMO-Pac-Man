@@ -200,8 +200,8 @@ if __name__ == "__main__":
     
     ghost_counter = 1
     print("in")
-    for i in range(0, 2000, 20):
-        for j in range(0, 2000, 30):
+    for i in range(0, 2000, 200):
+        for j in range(0, 2000, 300):
             for k in range(3):
                 while(True):
                     ghost_row = randint(i, min(i+18, 1999))
