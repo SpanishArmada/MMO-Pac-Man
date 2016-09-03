@@ -69,16 +69,15 @@ class Ghost:
     def early_update(self):
         self.has_moved = False
         
-        if self.get_next_x() != self.x or self.get_next_y != self.y:
-            return
+        if self.get_next_x() == self.x and self.get_next_y == self.y:
+            
+            arena = self.game_engine.arena
 
-        arena = self.game_engine.arena
-
-        possible_direction = []
-        for direction in range(0, 4):
-            self.orientation = direction
-            new_x, new_y = self.get_next_x(), self.get_next_y()
-            if self.x != new_x or self.y != new_y:
-                possible_direction.append(direction)
-        
-        self.orientation = random.choice(possible_direction)
+            possible_direction = []
+            for direction in range(0, 4):
+                self.orientation = direction
+                new_x, new_y = self.get_next_x(), self.get_next_y()
+                if self.x != new_x or self.y != new_y:
+                    possible_direction.append(direction)
+            
+            self.orientation = random.choice(possible_direction)
