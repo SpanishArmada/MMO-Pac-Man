@@ -6,7 +6,7 @@ class Grid:
     CHERRY = 3
     WALL = 4
 
-    def __init__(self, x, y, T = EMPTY):
+    def __init__(self, x, y, T=EMPTY):
         self.x = x
         self.y = y
         self.__type = T
@@ -40,3 +40,9 @@ class Grid:
         T = self.__type
         self.__type = EMPTY
         return T
+
+    def __repr__(self):
+        return self.__type
+
+    def __str__(self):
+        return self.__type
