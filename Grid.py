@@ -6,7 +6,7 @@ class Grid:
     CHERRY = 3
     WALL = 4
 
-    def __init__(self, x, y, T = Grid.WALL):
+    def __init__(self, x, y, T = WALL):
         self.x = x
         self.y = y
         self.__type = T
@@ -34,9 +34,9 @@ class Grid:
         self.__type = T
     
     def consume(self):
-        if self.__type == Grid.WALL:
+        if self.__type == WALL:
             raise Exception('You cannot consume wall!')
         
         T = self.__type
-        self.__type = Grid.EMPTY
+        self.__type = EMPTY
         return T

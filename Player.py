@@ -13,6 +13,7 @@ class Player:
         self.score = 0
         self.powered_up = False
         self.power_duration = 0
+        self.has_move = False
         self.game_engine = game_engine
 
     def get_x(self):
@@ -44,7 +45,7 @@ class Player:
         new_x = get_next_x()
         new_y = get_next_y()
 
-        if(self.game_engine.get_arena().get_grid(new_x, new_y).get_type() == Grid.WALL):
+        if(self.game_engine.get_arena().get_grid(new_x, new_y).get_type() == WALL):
             return False
         else:
             return True
@@ -67,16 +68,36 @@ class Player:
         new_x = get_next_x()
         new_y = get_next_y()
 
-        return self.process_player(new_x, new_y)
+        if self.game_engine.get_arena().get_grid(new_x, new_y).get_type() == Grid.WALL:
+            return self.process_player(self.x, self.y)
+        else:
+            return self.process_player(new_x, new_y)
 
     def process_player(self, next_x, next_y):
-        new_grid  = self.game_engine.get_arena().get_grid(next_x, next_y)
+        life = True
+
+        old_grid = self.game_engine.get_arena().get_grid(self.x, self.y)
+        new_grid = self.game_engine.get_arena().get_grid(next_x, next_y)
+
+        if powered_up:
+            for obj in new_grid.get_objects_on_top():
+                if (type(obj) == Ghost) or (obj.is_powered_up() == False):
+
+                    #check orientation
+
+    
+    def final_update(self):
+        if powered_up:
+            self.power_duration -= 1
+
+        if self.power_duration == 0:
+            self.powered_up = False
 
 
     def calculate_score(self, additional):
-        if(additional == 1):
+        if additional == 1:
             self.score += 10
-        elif(additional == 3):
+        elif additional == 3:
             self.score += 100
-        elif(additional == 5):
+        elif additional == 5:
             self.score += 200
