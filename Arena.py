@@ -139,12 +139,12 @@ class Arena:
         if self.__next_update <= 0:
             self.__next_update = random.randint(50, 100)
 
-            r = random.random()
             for i in range(1, self.height):
                 for j in range(1, self.width):
                     if self[i, j].get_type() != Grid.EMPTY:
                         continue
 
+                    r = random.random()
                     if r < self.__power_up_spawn_chance:
                         self[i, j].set_type(Grid.POWER_UP)
                     elif r < self.__pill_spawn_chance:
