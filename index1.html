@@ -1,9 +1,10 @@
 <html>
 <script>
     var ws = new WebSocket("ws://localhost:8888/ws");
+    var playerID = 0;
     ws.onopen = function() {
         // pass row and col here
-        ws.send(JSON.stringify({row : 1, col : 7}));
+        ws.send(JSON.stringify({row : 1, col : 7, playerID: 0}));
     };
     ws.onmessage = function (evt) {
         //alert(evt.data);
@@ -20,10 +21,18 @@
         data.pacPos to access pacman positions
 
         data.ghostPos to access ghost positions
+
+        data.score to access player's score
         */
-        alert(data.pacPos)
-		pac1.innerHTML = data.pacPos["1"][0];
-        pac2.innerHTML = data.pacPos["1"][1];
+        if(data.type == 0) {
+            playerID = data.playerID;
+            alert(playerID);
+        }
+        else {
+            alert(data.pacPos)
+            pac1.innerHTML = data.pacPos["1"][0];
+            pac2.innerHTML = data.pacPos["1"][1];
+        }
     };
 </script>
 <h1 id="pac1">5</h1>

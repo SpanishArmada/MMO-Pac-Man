@@ -24,12 +24,15 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             data.append(self)
             counter += 1
             players.append(Player(GE, counter, 1, 1))
+            msg = {"type": 0, "playerID": counter}
+            self.write_message(msg)
 
             
     def on_message(self, msg):
         incomingData = json.loads(msg)
         row = incomingData["row"]
         col = incomingData["col"]
+        playerID = incomingData["playerID"]
 
         grids = []
         pacPos = dict()
@@ -43,8 +46,13 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
         print(len(ghosts))
         print(ghosts[15].get_x())
         # TODO: send back player id and score
-        data = {"grids": grids, "pacPos": pacPos, "ghostPos": ghostPos}
+        for x in players:
+            if x.get_id() == playerID:
+                p = x
+                break
+        data = {"type": 1, "grids": grids, "pacPos": pacPos, "ghostPos": ghostPos, "score": p.calculate_score()}
         self.write_message(data)
+
     def on_close(self):
         if self in data:
             data.remove(self)
