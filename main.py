@@ -7,6 +7,7 @@ from GameEngine import GameEngine
 from Arena import Arena
 from Player import Player
 from Ghost import Ghost
+from random import randint
 
 data = []
 players = []
@@ -96,8 +97,22 @@ if __name__ == "__main__":
     global counter
     global GE
     GE = GameEngine()
-    for i in range(20):
-        ghosts.append(Ghost(GE, i, i, i))
+    # for i in range(20):
+    #     ghosts.append(Ghost(GE, i, i, i))
+    ghost_counter = 1
+    for i in range(0, 2000, 20):
+        for j in range(0, 2000, 30):
+            for k in range(3):
+                while(True):
+                    ghost_row = randint(i, min(i+18, 1999))
+                    ghost_col = randint(j, min(j+32, 1999))
+                    if(GE.get_arena().grids[ghost_row][ghost_col].get_type() != 4):
+                        break
+                ghosts.append(Ghost(GE, ghost_counter, ghost_row, ghost_col))
+                ghost_counter += 1
+    print(ghosts[0].get_x(), ghosts[0].get_y())
+    print(ghost_counter)
+    print(ghosts[10000].get_x(), ghosts[10000].get_y())
     app = make_app()
     app.listen(8888)
     tornado.ioloop.IOLoop.current().start()
