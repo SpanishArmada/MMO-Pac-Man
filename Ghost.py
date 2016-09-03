@@ -3,7 +3,6 @@
 class Ghost:
 
     #Attribute
-    next_id = 0
     
 
 
