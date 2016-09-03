@@ -19,15 +19,14 @@ class Arena:
             self.grids.append([])
             for j in range(width):
                 self.grids[i].append(Grid(j, i, Grid.WALL))
-        self.generate()
-        print("done")
-
-        # self.__emptied_grids = {}
         self.__next_update = 100
         self.__power_up_spawn_chance = 0.001
         self.__pill_spawn_chance = self.__power_up_spawn_chance + 0.75
-
-        self.__init_power_up_spawn_chance = 0.001
+        self.__init_pup_chance = 0.001
+        self.generate()
+        print("done")
+        # self.__emptied_grids = {}
+        
 
     def __getitem__(self, p):
         # I strictly expect that parameter 'p' is a tuple of two
@@ -116,8 +115,7 @@ class Arena:
             for j in range(self.width):
                 if self[i, j].get_type() == Grid.EMPTY:
                     self[i, j].set_type(Grid.PILL)
-                    
-                    if random.random() < self.__init_power_up_spawn_chance:
+                    if random.random() < self.__init_pup_chance:
                         self[i, j].set_type(Grid.POWER_UP)
         
         return True
@@ -159,7 +157,7 @@ class Arena:
         T = self[x, y].consume()
 
         # If recently emptied
-        if T != Grid.EMPTY and self[x, y].get_type() == Grid.EMPTY:
-            self.__emptied_grids[x, y] = random.randint(100, 200)
+        # if T != Grid.EMPTY and self[x, y].get_type() == Grid.EMPTY:
+        #     self.__emptied_grids[x, y] = random.randint(100, 200)
 
         return T

@@ -62,12 +62,11 @@ class Player:
         return self.y
 
     def update(self):
-        print("I am in")
-        arena = self.game_engine
+        arena = self.game_engine.arena
         next_x = self.get_next_x()
         next_y = self.get_next_y()
         new_grid = arena[next_x, next_y]
-        arr = filter(new_grid.get_objects_on_top(), lambda obj: self != obj)
+        arr = filter(lambda obj: self != obj, new_grid.get_objects_on_top())
 
         if self.powered_up:
             for obj in arr:
@@ -117,11 +116,11 @@ class Player:
         self.powered_up = self.power_duration > 0
 
     def add_score(self, case):
-        if case == PILL:
+        if case == Player.PILL:
             self.score += 10
-        elif case == CHERRY:
+        elif case == Player.CHERRY:
             self.score += 100
-        elif case == GHOST:
+        elif case == Player.GHOST:
             self.score += 200
-        elif case == OTHER_PLAYER:
+        elif case == Player.OTHER_PLAYER:
             self.score += 400
