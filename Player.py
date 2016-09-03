@@ -3,6 +3,7 @@ from Grid import Grid
 class Player:
     #Attribute
     PILL = Grid.PILL
+    POWER_UP = Grid.POWER_UP
     CHERRY = Grid.CHERRY
     GHOST = 10
     OTHER_PLAYER = 11
@@ -15,6 +16,7 @@ class Player:
         self.y = y
         self.orientation = 0
         self.score = 0
+        self.ghost_score = 200
         self.powered_up = False
         self.power_duration = 0
         self.has_moved = False
@@ -104,6 +106,7 @@ class Player:
                 self.add_score(T)
             elif T == Grid.POWER_UP:
                 self.powered_up = True
+                self.ghost_score = 200
                 self.power_duration = 20
 
         self.has_moved = True
@@ -118,9 +121,12 @@ class Player:
     def add_score(self, case):
         if case == PILL:
             self.score += 10
+        elif case == POWER_UP:
+            self.score += 50
         elif case == CHERRY:
             self.score += 100
         elif case == GHOST:
-            self.score += 200
+            self.score += self.ghost_score
+            self.ghost_score *= 2
         elif case == OTHER_PLAYER:
             self.score += 400
