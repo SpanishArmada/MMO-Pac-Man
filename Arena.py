@@ -137,7 +137,7 @@ class Arena:
         #     del self.__emptied_grids[key]
 
         if self.__next_update <= 0:
-            self.__next_update = random.randint(50, 100)
+            self.__next_update = random.randint(100, 200)
 
             for i in range(1, self.height):
                 for j in range(1, self.width):
