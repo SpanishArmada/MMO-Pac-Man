@@ -39,13 +39,16 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
 
             counter += 1
             players.append(Player(GE, counter, player_name, 1, 1))
-            
-            local_grids = GE.get_arena().grids[row - 9:row + 10]
+            left_boundary = col - 9
+            right_boundary = col + 9
+            top_boundary = row - 16
+            bottom_boundary = row + 16
+            local_grids = GE.get_arena().grids[top_boundary:bottom_boundary+1]
             
             grids = []
             food_pos = []
             for i in local_grids:
-                current_row = i[col - 16:col + 17]
+                current_row = i[left_boundary:right_boundary]
                 r = []
                 for j in current_row:
                     if(j.get_type() == 4):
@@ -53,15 +56,23 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                     else:
                         r.append(0)
                     if(j.get_type() == 1):
-                        food_pos.append([j.get_x(), j.get_y()])
+                        food_pos.append({"x": j.get_x(), "y": j.get_y()})
                 grids.append(r)
             print(grids)
             pac_pos = dict()
             ghost_pos = dict()
             for i in players:
-                pac_pos[str(i.get_id())] = {"x": i.get_x(), "y": i.get_y(), "orientation": i.orientation, "player_name": i.name} 
+                player_row = i.get_y()
+                player_col = i.get_x()
+                if(left_boundary <= player_col <= right_boundary and top_boundary <= player_row <= bottom_boundary):
+                    pac_pos[str(i.get_id())] = {"x": i.get_x(), "y": i.get_y(), "orientation": i.orientation, "player_name": i.name}
+                     
             for i in ghosts:
-                ghost_pos[str(i.get_id())] = {"x": i.get_x(), "y": i.get_y(), "orientation": i.orientation} 
+                ghost_row = i.get_y()
+                ghost_col = i.get_x()
+                if(left_boundary <= ghost_col <= right_boundary and top_boundary <= ghost_row <= bottom_boundary):
+                    ghost_pos[str(i.get_id())] = {"x": i.get_x(), "y": i.get_y(), "orientation": i.orientation, "ghost_type": i.ghost_type}
+
             print(len(players))
             p = None
             for x in players:
@@ -108,7 +119,7 @@ if __name__ == "__main__":
                     ghost_col = randint(j, min(j+32, 1999))
                     if(GE.get_arena().grids[ghost_row][ghost_col].get_type() != 4):
                         break
-                ghosts.append(Ghost(GE, ghost_counter, ghost_row, ghost_col))
+                ghosts.append(Ghost(GE, ghost_counter, ghost_counter % 4, ghost_col, ghost_row))
                 ghost_counter += 1
     print(ghosts[0].get_x(), ghosts[0].get_y())
     print(ghost_counter)

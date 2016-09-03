@@ -8,13 +8,14 @@ class Ghost:
 
     #Method
 
-    def __init__(self, game_engine, id, x, y):
+    def __init__(self, game_engine, id, ghost_type, x, y):
         self.id = id
         self.x = x
         self.y = y
         self.orientation = 0
         self.game_engine = game_engine
-        
+        self.ghost_type = ghost_type
+
     def get_x(self):
         return self.x
     
