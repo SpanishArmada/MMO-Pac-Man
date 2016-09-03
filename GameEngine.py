@@ -9,24 +9,18 @@ class GameEngine:
         self.__arena = Arena(self, 2001, 2001)
         self.__ghosts = {}
 
-        self.__sec_per_tick = .25
+        self.__sec_per_tick = .5
         self.__timer = Timer(self.__sec_per_tick, self.update)
 
     def update(self):
         for player in self.__players:
-            if player.has_pressed_arrow_key():
-                player.change_orientation(arrow_key)
-
-        for ghost in self.__ghosts:
-            ghost.set_random_orientation()
+            player.early_update()
 
         for player in self.__players:
-            player.move_forward()
+            player.update();
 
         for ghost in self.__ghosts:
-            ghost.move_forward()
-
-        
+            ghost.update()
 
     def start(self):
         self.__timer.start()
