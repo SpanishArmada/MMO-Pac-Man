@@ -172,6 +172,11 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                     p = x
                     break
             players.remove(p)
+            global list_of_clients
+            for i in list_of_clients:
+                if(i[0] == self):
+                    list_of_clients.remove(i)
+                    break
 
     def on_close(self):
         global list_of_clients
