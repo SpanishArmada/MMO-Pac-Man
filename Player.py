@@ -73,10 +73,13 @@ class Player:
                         continue
                     elif obj.has_moved:
                         self.calculate_score(7)
+                        obj.is_dead = True
                     elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
                         self.calculate_score(7)
+                        obj.is_dead = True
                 elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
                     self.calculate_score(5)
+                    obj.is_dead = True
         else:
             for obj in arr:
                 obj_new_x, obj_new_y = obj.get_next_x(), obj.get_new_y()
@@ -100,9 +103,9 @@ class Player:
                 self.powered_up = True
                 self.power_duration = 20
 
-            self.has_moved = True
-            self.x = next_x
-            self.y = next_y
+        self.has_moved = True
+        self.x = next_x
+        self.y = next_y
     
     def early_update(self):
         self.has_moved = False

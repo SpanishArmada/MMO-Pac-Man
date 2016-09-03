@@ -13,6 +13,8 @@ class Ghost:
         self.x = x
         self.y = y
         self.orientation = 0
+        self.has_moved = False
+        self.is_dead = False
         self.game_engine = game_engine
         self.ghost_type = ghost_type
 
@@ -38,6 +40,36 @@ class Ghost:
         elif self.orientation == 2:
             return self.y + 1
         return self.y
+
+    def update(self):
+        arena = self.game_engine
+        next_x = self.get_next_x()
+        next_y = self.get_next_y()
+        new_grid = arena[next_x, next_y]
+        arr = filter(new_grid.get_objects_on_top(), lambda obj: return self != obj)
+
+        for obj in arr:
+            obj_new_x, obj_new_y = obj.get_next_x(), obj.get_new_y()
+            if type(obj) == Player:
+                if obj.is_powered_up:
+                    if obj.has_moved:
+                        obj.calculate_score(5)
+                        self.is_dead = True
+                    elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
+                        obj.calculate_score(5)
+                        self.is_dead = True
+                else:
+                    if obj.has_moved:
+                        obj.is_dead = True
+                    elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
+                        obj.is_dead = True
+        
+        self.has_moved = True
+        self.x = next_x
+        self.y = next_y
+
+    def early_update(self):
+        self.has_moved = False
 
     def set_random_orientation(self):
         arena = game_engine.__arena
