@@ -106,9 +106,13 @@ class Player:
                 self.powered_up = True
                 self.power_duration = 20
 
+        arena.move(self, next_x, next_y)
+
         self.has_moved = True
+
         self.x = next_x
         self.y = next_y
+
     
     def early_update(self):
         self.has_moved = False

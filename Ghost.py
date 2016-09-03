@@ -61,8 +61,11 @@ class Ghost:
                         obj.is_dead = True
                     elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
                         obj.is_dead = True
-        
+
+        arena.move(self, next_x, next_y)
+
         self.has_moved = True
+
         self.x = next_x
         self.y = next_y
 

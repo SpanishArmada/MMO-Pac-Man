@@ -161,3 +161,7 @@ class Arena:
         #     self.__emptied_grids[x, y] = random.randint(100, 200)
 
         return T
+
+    def move(self, who, new_x, new_y):
+        self[who.x, who.y].remove_object_on_top(who)
+        self[new_x, new_y].insert_object_on_top(who)
