@@ -38,7 +38,7 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                     break
             GE.add_player(counter, "dummy_name", player_x, player_y)
             msg = {"type": 0, "player_id": counter, "x": player_x, "y": player_y}
-            self.callback = PeriodicCallback(self.update_client, int(100 * GE.__sec_per_tick))
+            self.callback = PeriodicCallback(self.update_client, 250)
             self.callback.start()
             self.write_message(msg)
 
@@ -226,7 +226,6 @@ if __name__ == "__main__":
                 GE.add_ghost(ghost_counter, ghost_counter % 4, ghost_col, ghost_row)
                 ghost_counter += 1
     print("done")
-    GE.start()
     app = make_app()
     app.listen(8888)
     tornado.ioloop.IOLoop.current().start()
