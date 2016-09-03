@@ -118,12 +118,17 @@ class Arena:
         return self.grids[y][x]
 
     def late_update(self):
+        temp = []
         for (x, y), t in self.__emptied_grids.items():
             if t <= 0:
                 self[x, y].set_type(Grid.PILL)
-                del self.__emptied_grids[x, y]
+                temp.append((x, y, ))
             else:
                 self.__emptied_grids[x, y] = t - 1
+        
+        # Preventing RTE
+        for key in temp:
+            del self.__emptied_grids[key]
     
     def take(self, x, y):
         T = self[x, y].consume()
