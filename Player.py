@@ -7,7 +7,7 @@ class Player:
 
     #Method
 
-    def __init__(self, game_engine, x = -1, y = -1, id):
+    def __init__(self, game_engine, id, x = -1, y = -1):
         self.id = id
         self.x = x
         self.y = y
@@ -24,6 +24,9 @@ class Player:
     
     def get_score(self):
         return self.score
+
+    def get_id(self):
+        return self.id
 
     def is_powered_up(self):
         return self.powerUp
@@ -53,3 +56,9 @@ class Player:
 
     def move_forward(self):
         return False
+
+    def calculate_score(self, additional):
+        if(additional == 1):
+            self.score += 10
+        elif(additional == 3):
+            self.score += 100

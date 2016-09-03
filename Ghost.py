@@ -9,7 +9,7 @@ class Ghost:
 
     #Method
 
-    def __init__(self, game_engine, x = -1, y = -1, id):
+    def __init__(self, game_engine, id, x = -1, y = -1):
         self.id = id
         self.x = x
         self.y = y
