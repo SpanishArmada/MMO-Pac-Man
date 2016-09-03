@@ -20,7 +20,7 @@ class Player:
         self.has_moved = False
         self.is_dead = False
         self.game_engine = game_engine
-        
+
         T = game_engine.arena.take(x, y)
         self.add_score(T)
 
@@ -62,11 +62,12 @@ class Player:
         return self.y
 
     def update(self):
-        arena = self.game_engine.arena
+        print("I am in")
+        arena = self.game_engine
         next_x = self.get_next_x()
         next_y = self.get_next_y()
         new_grid = arena[next_x, next_y]
-        arr = filter(lambda obj: self != obj, new_grid.get_objects_on_top())
+        arr = filter(new_grid.get_objects_on_top(), lambda obj: self != obj)
 
         if self.powered_up:
             for obj in arr:
@@ -75,13 +76,13 @@ class Player:
                     if obj.is_powered_up:
                         continue
                     elif obj.has_moved:
-                        self.add_score(Player.OTHER_PLAYER)
+                        self.add_score(OTHER_PLAYER)
                         obj.is_dead = True
                     elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
-                        self.add_score(Player.OTHER_PLAYER)
+                        self.add_score(OTHER_PLAYER)
                         obj.is_dead = True
                 elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
-                    self.add_score(Player.GHOST)
+                    self.add_score(GHOST)
                     obj.is_dead = True
         else:
             for obj in arr:
@@ -90,24 +91,19 @@ class Player:
                     if not obj.is_powered_up:
                         continue
                     elif obj.has_moved:
-                        obj.add_score(Player.OTHER_PLAYER)
+                        obj.add_score(OTHER_PLAYER)
                         self.is_dead = True
                     elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
-                        obj.add_score(Player.OTHER_PLAYER)
+                        obj.add_score(OTHER_PLAYER)
                         self.is_dead = True
                 elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
                     self.is_dead = True
 
         if not self.is_dead:
-            self.power_duration = max(0, self.power_duration - 1)
-            self.powered_up = self.power_duration > 0
-
             T = arena.take(next_x, next_y)
-
             if T == Grid.PILL or T == Grid.CHERRY:    
                 self.add_score(T)
             elif T == Grid.POWER_UP:
-                self.add_score(T)
                 self.powered_up = True
                 self.power_duration = 20
 
@@ -117,17 +113,15 @@ class Player:
     
     def early_update(self):
         self.has_moved = False
-        # self.power_duration = max(0, self.power_duration - 1)
-        # self.powered_up = self.power_duration > 0
+        self.power_duration = max(0, self.power_duration - 1)
+        self.powered_up = self.power_duration > 0
 
     def add_score(self, case):
-        if case == Player.PILL:
+        if case == PILL:
             self.score += 10
-        elif case == Grid.POWER_UP:
-            self.score += 50
-        elif case == Player.CHERRY:
+        elif case == CHERRY:
             self.score += 100
-        elif case == Player.GHOST:
+        elif case == GHOST:
             self.score += 200
-        elif case == Player.OTHER_PLAYER:
+        elif case == OTHER_PLAYER:
             self.score += 400
