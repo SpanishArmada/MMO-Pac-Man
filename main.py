@@ -66,7 +66,7 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                 player_col = i.get_x()
                 if(left_boundary <= player_col <= right_boundary and top_boundary <= player_row <= bottom_boundary):
                     pac_pos[str(i.get_id())] = {"x": i.get_x(), "y": i.get_y(), "orientation": i.orientation, "player_name": i.name}
-                     
+
             for i in ghosts:
                 ghost_row = i.get_y()
                 ghost_col = i.get_x()
@@ -111,6 +111,7 @@ if __name__ == "__main__":
     # for i in range(20):
     #     ghosts.append(Ghost(GE, i, i, i))
     ghost_counter = 1
+    print("in")
     for i in range(0, 2000, 20):
         for j in range(0, 2000, 30):
             for k in range(3):
