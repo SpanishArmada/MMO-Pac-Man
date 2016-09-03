@@ -15,6 +15,8 @@ class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("index1.html")
 
+
+
 class SocketHandler(tornado.websocket.WebSocketHandler):
     """
         Type:
@@ -38,70 +40,10 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                     break
             GE.add_player(counter, "dummy_name", player_x, player_y)
             msg = {"type": 0, "player_id": counter, "x": player_x, "y": player_y}
-            self.callback = PeriodicCallback(self.update_client, 250)
-            self.callback.start()
+            
             self.write_message(msg)
 
-    def update_client(self):
-        GE.update()
-
-        global list_of_clients
-        global GE
-        for d in list_of_clients:
-            player_id = d[1]
-            p = None
-            for player in GE.get_players():
-                if player.get_id() == player_id:
-                    p = player
-                    break
-            if(p == None):
-                continue
-            row = p.get_y()
-            col = p.get_x()
-
-            left_boundary = col - 16
-            right_boundary = col + 16
-            top_boundary = row - 9
-            bottom_boundary = row + 9
-            local_grids = GE.get_arena().grids[top_boundary:bottom_boundary+1]
-            
-            grids = []
-            food_pos = []
-            power_up_pos = []
-            for i in local_grids:
-                current_row = i[left_boundary:right_boundary]
-                r = []
-                for j in current_row:
-                    if(j.get_type() == 4):
-                        r.append(1)
-                    else:
-                        r.append(0)
-                    if(j.get_type() == 1):
-                        food_pos.append({"x": j.get_x(), "y": j.get_y()})
-                    if(j.get_type() == 2):
-                        power_up_pos.append({"x": j.get_x(), "y": j.get_y()})
-                grids.append(r)
-            
-
-            pac_pos = dict()
-            ghost_pos = dict()
-            for i in GE.get_players():
-                player_row = i.get_y()
-                player_col = i.get_x()
-                if(left_boundary <= player_col <= right_boundary and top_boundary <= player_row <= bottom_boundary):
-                    pac_pos[str(i.get_id())] = {"x": i.get_x(), "y": i.get_y(), "orientation": i.orientation, "player_name": i.name}
-
-            for i in GE.get_ghosts():
-                ghost_row = i.get_y()
-                ghost_col = i.get_x()
-                if(left_boundary <= ghost_col <= right_boundary and top_boundary <= ghost_row <= bottom_boundary):
-                    ghost_pos[str(i.get_id())] = {"x": i.get_x(), "y": i.get_y(), "orientation": i.orientation, "ghost_type": i.ghost_type}
-
-            if(p.is_dead):
-                data = {"type": 2}
-            else:
-                data = {"type": 1, "grids": grids, "pac_pos": pac_pos, "ghost_pos": ghost_pos, "food_pos": food_pos, "score": p.get_score(), "power_up_pos": power_up_pos}
-            self.write_message(data)
+    
 
     def on_message(self, msg):
         global counter
@@ -211,6 +153,67 @@ def make_app():
         (r"/ws", SocketHandler),
     ])
 
+def update_client():
+    GE.update()
+
+    global list_of_clients
+    global GE
+    for d in list_of_clients:
+        player_id = d[1]
+        p = None
+        for player in GE.get_players():
+            if player.get_id() == player_id:
+                p = player
+                break
+        if(p == None):
+            continue
+        row = p.get_y()
+        col = p.get_x()
+
+        left_boundary = col - 16
+        right_boundary = col + 16
+        top_boundary = row - 9
+        bottom_boundary = row + 9
+        local_grids = GE.get_arena().grids[top_boundary:bottom_boundary+1]
+        
+        grids = []
+        food_pos = []
+        power_up_pos = []
+        for i in local_grids:
+            current_row = i[left_boundary:right_boundary]
+            r = []
+            for j in current_row:
+                if(j.get_type() == 4):
+                    r.append(1)
+                else:
+                    r.append(0)
+                if(j.get_type() == 1):
+                    food_pos.append({"x": j.get_x(), "y": j.get_y()})
+                if(j.get_type() == 2):
+                    power_up_pos.append({"x": j.get_x(), "y": j.get_y()})
+            grids.append(r)
+        
+
+        pac_pos = dict()
+        ghost_pos = dict()
+        for i in GE.get_players():
+            player_row = i.get_y()
+            player_col = i.get_x()
+            if(left_boundary <= player_col <= right_boundary and top_boundary <= player_row <= bottom_boundary):
+                pac_pos[str(i.get_id())] = {"x": i.get_x(), "y": i.get_y(), "orientation": i.orientation, "player_name": i.name}
+
+        for i in GE.get_ghosts():
+            ghost_row = i.get_y()
+            ghost_col = i.get_x()
+            if(left_boundary <= ghost_col <= right_boundary and top_boundary <= ghost_row <= bottom_boundary):
+                ghost_pos[str(i.get_id())] = {"x": i.get_x(), "y": i.get_y(), "orientation": i.orientation, "ghost_type": i.ghost_type}
+
+        if(p.is_dead):
+            data = {"type": 2}
+        else:
+            data = {"type": 1, "grids": grids, "pac_pos": pac_pos, "ghost_pos": ghost_pos, "food_pos": food_pos, "score": p.get_score(), "power_up_pos": power_up_pos}
+        d[0].write_message(data)
+
 if __name__ == "__main__":
     GE = GameEngine()
     
@@ -227,6 +230,8 @@ if __name__ == "__main__":
                 GE.add_ghost(ghost_counter, ghost_counter % 4, ghost_col, ghost_row)
                 ghost_counter += 1
     print("done")
+    callback = PeriodicCallback(update_client, 300)
+    callback.start()
     app = make_app()
     app.listen(8888)
     tornado.ioloop.IOLoop.current().start()
