@@ -3,7 +3,6 @@
 class Player:
 
     #Attribute
-    next_id = 0
     
 
     #Method
