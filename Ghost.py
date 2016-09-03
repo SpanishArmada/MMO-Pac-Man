@@ -47,7 +47,7 @@ class Ghost:
         arr = filter(lambda obj: self != obj, new_grid.get_objects_on_top())
 
         for obj in arr:
-            obj_new_x, obj_new_y = obj.get_next_x(), obj.get_new_y()
+            obj_new_x, obj_new_y = obj.get_next_x(), obj.get_next_y()
             if type(obj) == Player:
                 if obj.is_powered_up:
                     if obj.has_moved:

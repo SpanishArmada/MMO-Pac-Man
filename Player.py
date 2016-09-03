@@ -85,7 +85,7 @@ class Player:
                     obj.is_dead = True
         else:
             for obj in arr:
-                obj_new_x, obj_new_y = obj.get_next_x(), obj.get_new_y()
+                obj_new_x, obj_new_y = obj.get_next_x(), obj.get_next_y()
                 if type(obj) == Player:
                     if not obj.is_powered_up:
                         continue
@@ -109,9 +109,7 @@ class Player:
                 self.power_duration = 20
 
         else:
-            arena.lift(self, next_x, next_y)
-
-        arena.move(self, next_x, next_y)
+            arena.lift(self)
 
         self.has_moved = True
 

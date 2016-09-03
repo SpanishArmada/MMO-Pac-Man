@@ -6,12 +6,12 @@ import random
 
 class GameEngine:
     def __init__(self, arena_width=501, arena_height=501, max_num_ghost=35000):
+        
         self.arena_width = arena_width
         self.arena_height = arena_height
         self.max_num_ghost = max_num_ghost
-        
-        self.players = {}
         self.arena = Arena(self, arena_width, arena_height)
+        self.players = {}
         self.ghosts = {}
 
         self.__sec_per_tick = .5
@@ -64,15 +64,14 @@ class GameEngine:
     
     def add_player(self, counter, name, x, y):
         player = Player(self, counter, name, x, y)
-
         self.players[counter] = player
         self.arena[x, y].insert_object_on_top(player)
 
     def add_ghost(self, counter, ghost_type, y, x):
         ghost = Ghost(self, counter, ghost_type, y, x)
-
+        
         self.ghosts[counter] = ghost
-        self.arena[x, y].insert_object_on_top(ghost)
+        self.arena[y, x].insert_object_on_top(ghost)
     
     def new_player(self, player):
         self.players[player.get_id()] = player
