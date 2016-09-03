@@ -105,6 +105,10 @@ class Arena:
                 for i in range(y, next_y + 1):
                     self[i, j].set_type(Grid.EMPTY)
         
+        for i in range(self.height):
+            for j in range(self.width):
+                if(self[i, j].get_type() == Grid.EMPTY):
+                    self[i, j].set_type(Grid.PILL)
         return True
     
     def get_grid(self, x, y):
