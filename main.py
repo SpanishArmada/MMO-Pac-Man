@@ -45,20 +45,20 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                 current_row = i[col - 16:col + 17]
                 r = []
                 for j in current_row:
-                    if(j.get_typ == 4):
+                    if(j.get_type() == 4):
                         r.append(1)
                     else:
                         r.append(0)
-                    if(j.get_typ == 1):
-                        food_pospend([j.get_x(), j.get_y()])
+                    if(j.get_type() == 1):
+                        food_pos.append([j.get_x(), j.get_y()])
                 grids.append(r)
             print(grids)
             pac_pos = dict()
             ghost_pos = dict()
             for i in players:
-                pac_pos[str(i.get_id())] = (i.get_x(), i.get_y())
+                pac_pos[str(i.get_id())] = [i.get_x(), i.get_y(), i.orientation]
             for i in ghosts:
-                ghost_pos[str(i.get_id())] = (i.get_x(), i.get_y())
+                ghost_pos[str(i.get_id())] = [i.get_x(), i.get_y(), i.orientation]
             print(len(players))
             p = None
             for x in players:
