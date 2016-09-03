@@ -4,7 +4,7 @@
     var player_id = 0;
     ws.onopen = function() {
         // pass row and col here
-        ws.send(JSON.stringify({type: 0, row : 100, col : 100, player_id: 1}));
+        ws.send(JSON.stringify({type: 0, row : 100, col : 100, player_id: 1, player_name: "Kenrick"}));
     };
     ws.onmessage = function (evt) {
         //alert(evt.data);
@@ -28,9 +28,9 @@
             alert(player_id);
         }
         else {
-            alert(data.pac_pos)
-            pac1.innerHTML = data.pac_pos["1"][0];
-            pac2.innerHTML = data.pac_pos["1"][1];
+            alert(data.pac_pos["1"]["player_name"])
+            pac1.innerHTML = data.pac_pos["1"]["x"];
+            pac2.innerHTML = data.pac_pos["1"]["y"];
         }
     };
     window.onbeforeunload = function() {

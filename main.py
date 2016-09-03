@@ -22,13 +22,11 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
         global counter
         if(self not in data):
             data.append(self)
-            counter += 1
-            players.append(Player(GE, counter, 1, 1))
-            msg = {"type": 0, "player_id": counter}
+            msg = {"type": 0, "player_id": counter + 1}
             self.write_message(msg)
-
             
     def on_message(self, msg):
+        global counter
         incoming_data = json.loads(msg)
         msg_type = incoming_data["type"]
         print(msg_type)
@@ -36,9 +34,13 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             row = incoming_data["row"]
             col = incoming_data["col"]
             player_id = incoming_data["player_id"]
-            print("row", row)
+            player_name = incoming_data["player_name"]
+
+            counter += 1
+            players.append(Player(GE, counter, player_name, 1, 1))
+            
             local_grids = GE.get_arena().grids[row - 9:row + 10]
-            print("len", len(local_grids))
+            
             grids = []
             food_pos = []
             for i in local_grids:
@@ -56,9 +58,9 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             pac_pos = dict()
             ghost_pos = dict()
             for i in players:
-                pac_pos[str(i.get_id())] = [i.get_x(), i.get_y(), i.orientation]
+                pac_pos[str(i.get_id())] = {"x": i.get_x(), "y": i.get_y(), "orientation": i.orientation, "player_name": i.name} 
             for i in ghosts:
-                ghost_pos[str(i.get_id())] = [i.get_x(), i.get_y(), i.orientation]
+                ghost_pos[str(i.get_id())] = {"x": i.get_x(), "y": i.get_y(), "orientation": i.orientation} 
             print(len(players))
             p = None
             for x in players:
@@ -82,8 +84,6 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
     def on_close(self):
         if self in data:
             data.remove(self)
-            #TODO: remove player
-            #players.remove()
             
 
 def make_app():
