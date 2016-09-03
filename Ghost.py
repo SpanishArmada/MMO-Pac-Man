@@ -10,9 +10,8 @@ class Ghost:
 
     #Method
 
-    def __init__(self, game_engine, x = -1, y = -1):
-        self.id = next_id
-        next_id = next_id + 1
+    def __init__(self, game_engine, x = -1, y = -1, id):
+        self.id = id
         self.x = x
         self.y = y
         ori = 0
