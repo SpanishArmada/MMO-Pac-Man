@@ -1,10 +1,10 @@
 <html>
 <script>
     var ws = new WebSocket("ws://localhost:8888/ws");
-    var playerID = 0;
+    var player_id = 0;
     ws.onopen = function() {
         // pass row and col here
-        ws.send(JSON.stringify({type: 0, row : 100, col : 100, playerID: 1}));
+        ws.send(JSON.stringify({type: 0, row : 100, col : 100, player_id: 1}));
     };
     ws.onmessage = function (evt) {
         //alert(evt.data);
@@ -13,29 +13,28 @@
         /*
         data.grids to access grids information
             0 = empty grid
-            1 = normal food
-            2 = power up
-            3 = cherry
-            4 = wall
+            1 = wall
 
-        data.pacPos to access pacman positions
+        data.pac_pos to access pacman positions
 
-        data.ghostPos to access ghost positions
+        data.ghost_pos to access ghost positions
 
         data.score to access player's score
+
+        data.food_pos to access food coordinates (list of coordinates)
         */
         if(data.type == 0) {
-            playerID = data.playerID;
-            alert(playerID);
+            player_id = data.player_id;
+            alert(player_id);
         }
         else {
-            alert(data.pacPos)
-            pac1.innerHTML = data.pacPos["1"][0];
-            pac2.innerHTML = data.pacPos["1"][1];
+            alert(data.pac_pos)
+            pac1.innerHTML = data.pac_pos["1"][0];
+            pac2.innerHTML = data.pac_pos["1"][1];
         }
     };
     window.onbeforeunload = function() {
-        ws.send(JSON.stringify({type: 1, playerID: playerID}));
+        ws.send(JSON.stringify({type: 1, player_id: player_id}));
         ws.onclose = function () {}; // disable onclose handler first
         ws.close()
     };
