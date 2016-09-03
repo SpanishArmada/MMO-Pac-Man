@@ -22,15 +22,21 @@ class GameEngine:
         self.__timer.start()
         
         for player in self.players.values():
+            print("Gede")
             player.early_update()
         
         for ghost in self.ghosts.values():
+            print("Bagus")
             ghost.early_update()
 
+        print("self.players are %s" % self.players)
+
         for player in self.players.values():
+            print("Bayu")
             player.update()
 
         for ghost in self.ghosts.values():
+            print("Pentium")
             ghost.update()
 
         self.arena.late_update()

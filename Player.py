@@ -78,13 +78,13 @@ class Player:
                     if obj.is_powered_up:
                         continue
                     elif obj.has_moved:
-                        self.add_score(OTHER_PLAYER)
+                        self.add_score(Player.OTHER_PLAYER)
                         obj.is_dead = True
                     elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
-                        self.add_score(OTHER_PLAYER)
+                        self.add_score(Player.OTHER_PLAYER)
                         obj.is_dead = True
                 elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
-                    self.add_score(GHOST)
+                    self.add_score(Player.GHOST)
                     obj.is_dead = True
         else:
             for obj in arr:
@@ -93,10 +93,10 @@ class Player:
                     if not obj.is_powered_up:
                         continue
                     elif obj.has_moved:
-                        obj.add_score(OTHER_PLAYER)
+                        obj.add_score(Player.OTHER_PLAYER)
                         self.is_dead = True
                     elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
-                        obj.add_score(OTHER_PLAYER)
+                        obj.add_score(Player.OTHER_PLAYER)
                         self.is_dead = True
                 elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
                     self.is_dead = True
@@ -120,14 +120,14 @@ class Player:
         self.powered_up = self.power_duration > 0
 
     def add_score(self, case):
-        if case == PILL:
+        if case == Player.PILL:
             self.score += 10
-        elif case == POWER_UP:
+        elif case == Player.POWER_UP:
             self.score += 50
-        elif case == CHERRY:
+        elif case == Player.CHERRY:
             self.score += 100
-        elif case == GHOST:
+        elif case == Player.GHOST:
             self.score += self.ghost_score
             self.ghost_score *= 2
-        elif case == OTHER_PLAYER:
+        elif case == Player.OTHER_PLAYER:
             self.score += 400

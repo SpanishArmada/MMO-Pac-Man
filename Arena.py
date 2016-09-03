@@ -118,18 +118,18 @@ class Arena:
         return self.grids[y][x]
 
     def late_update(self):
-        for (x, y), t in self.__emptied_grid.items():
+        for (x, y), t in self.__emptied_grids.items():
             if t <= 0:
                 self[x, y].set_type(Grid.PILL)
-                del self.__emptied_grid[x, y]
+                del self.__emptied_grids[x, y]
             else:
-                self.__emptied_grid[x, y] = t - 1
+                self.__emptied_grids[x, y] = t - 1
     
     def take(self, x, y):
         T = self[x, y].consume()
 
         # If recently emptied
         if T != Grid.EMPTY and self[x, y].get_type() == Grid.EMPTY:
-            self.__emptied_grid[x, y] = random.randint(100, 200)
+            self.__emptied_grids[x, y] = random.randint(100, 200)
 
         return T

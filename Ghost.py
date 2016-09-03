@@ -24,16 +24,16 @@ class Ghost:
         return self.id
     
     def get_next_x(self):
-        if self.orientation == 1:
+        if self.orientation == 0:
             return self.x - 1
-        elif self.orientation == 3:
-            return self.y + 1
+        elif self.orientation == 2:
+            return self.x + 1
         return self.x
     
     def get_next_y(self):
-        if self.orientation == 0:
+        if self.orientation == 1:
             return self.y - 1
-        elif self.orientation == 2:
+        elif self.orientation == 3:
             return self.y + 1
         return self.y
 
@@ -70,12 +70,12 @@ class Ghost:
 
     def set_random_orientation(self):
         arena = self.game_engine.arena
-        self.orientation = random.choice(self.orientation_choices)
+        self.orientation = (self.orientation + 1) % 4
         while True:
             new_x = self.get_next_x()
             new_y = self.get_next_y()
+            self.orientation = (self.orientation + 1) % 4
             if arena.grids[new_x][new_y].get_type() != Grid.WALL:
                 break
-            self.ori = random.choice(self.orientation_choices)
         self.x = new_x
         self.y = new_y

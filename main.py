@@ -45,7 +45,7 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
     def update_client(self):
         global list_of_clients
         global GE
-        print(list_of_clients)
+        #print(list_of_clients)
         for d in list_of_clients:
             player_id = d[1]
             p = None
@@ -141,7 +141,7 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                         food_pos.append({"x": j.get_x(), "y": j.get_y()})
                 grids.append(r)
                 
-            print(grids)
+            #print(grids)
             pac_pos = dict()
             ghost_pos = dict()
             for i in GE.get_players():
