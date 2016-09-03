@@ -175,6 +175,7 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             global list_of_clients
             for i in list_of_clients:
                 if(i[0] == self):
+                    self.callback.stop()
                     list_of_clients.remove(i)
                     break
 
