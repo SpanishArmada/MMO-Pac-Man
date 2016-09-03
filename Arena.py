@@ -19,6 +19,8 @@ class Arena:
             self.grids.append([])
             for j in range(width):
                 self.grids[i].append(Grid(j, i, Grid.WALL))
+        self.generate()
+        print("done")
 
     def __getitem__(self, p):
         # I strictly expect that parameter 'p' is a tuple of two
