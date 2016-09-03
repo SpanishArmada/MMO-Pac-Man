@@ -174,7 +174,7 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                 data = {"type": 2}
                 
             else:
-                data = {"type": 1, "grids": grids, "pac_pos": pac_pos, "ghost_pos": ghost_pos, "food_pos": food_pos, "score": p.get_score()}
+                data = {"type": 1, "grids": grids, "pac_pos": pac_pos, "ghost_pos": ghost_pos, "food_pos": food_pos, "score": p.get_score(), "power_up_pos": power_up_pos}
             self.write_message(data)
         else:
             # closed
