@@ -6,10 +6,10 @@ class Grid:
     CHERRY = 3
     WALL = 4
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, T = Grid.WALL):
         self.x = x
         self.y = y
-        self.__type = Grid.EMPTY
+        self.__type = T
         self.objects_on_top = []
 
     def get_x(self):
