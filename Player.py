@@ -4,8 +4,9 @@ class Player:
     #Attribute
 
     #Method
-    def __init__(self, game_engine, id, x, y):
+    def __init__(self, game_engine, id, name, x, y):
         self.id = id
+        self.name = name
         self.x = x
         self.y = y
         self.orientation = 0
@@ -25,6 +26,9 @@ class Player:
 
     def get_id(self):
         return self.id
+
+    def get_name(self):
+        return self.name
 
     def is_powered_up(self):
         return self.powered_up
