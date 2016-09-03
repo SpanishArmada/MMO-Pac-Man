@@ -13,7 +13,7 @@ class Player:
         self.score = 0
         self.powered_up = False
         self.power_duration = 0
-        self.has_move = False
+        self.has_moved = False
         self.is_death = False
         self.game_engine = game_engine
 
@@ -35,45 +35,40 @@ class Player:
     def is_powered_up(self):
         return self.powered_up
 
-    def has_pressed_arrow_key(self):
+    def pressed_arrow_key(self, arrow_key):
         # Not yet implemented
         return False
 
     def change_orientation(self, ori):
         self.orientation = orientation
 
-    def can_move_forward(self):
-        new_x = self.get_next_x()
-        new_y = self.get_next_y()
-
-        if(self.game_engine.get_arena().get_grid(new_x, new_y).get_type() == Grid.WALL):
-            return False
-        else:
-            return True
-
     def get_next_x(self):
-        if (self.orientation == 1) and (game_engine.get_arena().get_grid(self.x - 1, self.y).get_type() != Grid.WALL):
+        arena = self.game_engine.get_arena()
+        if self.orientation == 1 and arena[self.x - 1, self.y].get_type() != Grid.WALL:
             return self.x - 1
-        elif (self.orientation == 3) and (game_engine.get_arena().get_grid(self.x + 1, self.y).get_type() != Grid.WALL):
+        elif self.orientation == 3 and arena[self.x + 1, self.y].get_type() != Grid.WALL:
             return self.x + 1
         return self.x
     
     def get_next_y(self):
-        if (self.orientation == 0) and (game_engine.get_arena().get_grid(self.x, self.y - 1).get_type() != Grid.WALL) :
+        arena = self.game_engine.get_arena()
+        if self.orientation == 0 and arena[self.x, self.y - 1].get_type() != Grid.WALL:
             return self.y - 1
-        elif (self.orientation == 2) and (game_engine.get_arena().get_grid(self.x, self.y + 1).get_type() != Grid.WALL):
+        elif self.orientation == 2 and arena[self.x, self.y + 1].get_type() != Grid.WALL:
             return self.y + 1
         return self.y
 
-    def move_forward(self):
-        new_x = self.get_next_x()
-        new_y = self.get_next_y()
+    def update(self):
+        arena = self.game_engine
+        next_x = self.get_next_x()
+        next_y = self.get_next_y()
+        new_grid = arena[next_x, next_y]
 
-        return self.process_player(new_x, new_y)
-
-    def process_player(self, next_x, next_y):
-        new_grid = self.game_engine.get_arena().get_grid(next_x, next_y)
-
+        if new_grid.get_type() == Grid.WALL:
+            # Immediately recognize that this player has moved
+            self.has_moved = True
+            return
+        
         if powered_up:
             for obj in new_grid.get_objects_on_top():
                 obj_new_x = obj.get_next_x()
@@ -81,7 +76,7 @@ class Player:
                 if type(obj) == Player:
                     if obj.is_powered_up:
                         continue
-                    elif obj.has_move:
+                    elif obj.has_moved:
                         self.calculate_score(7)
                     elif ((obj_new_x == next_x) and (obj_new_y == next_y)) or ((obj_new_x == self.x) and (obj_new_y == self.y)):
                         self.calculate_score(7)
@@ -94,7 +89,7 @@ class Player:
                 if type(obj) == Player:
                     if not obj.is_powered_up:
                         continue
-                    elif obj.has_move:
+                    elif obj.has_moved:
                         obj.calculate_score(7)
                         self.is_death = True
                     elif ((obj_new_x == next_x) and (obj_new_y == next_y)) or ((obj_new_x == self.x) and (obj_new_y == self.y)):
@@ -102,16 +97,21 @@ class Player:
                         self.is_death = True
                 elif ((obj_new_x == next_x) and (obj_new_y == next_y)) or ((obj_new_x == self.x) and (obj_new_y == self.y)):
                     self.is_death = True
+
         if not self.is_death:
-            if (new_grid.get_type() == Grid.PILL) or (new_grid.get_type() == Grid.CHERRY):
-                new_grid.consume()
+            if (new_grid.get_type() == Grid.PILL) or (new_grid.get_type() == Grid.CHERRY):    
                 self.calculate_score(new_grid.get_type())
             elif new_grid.get_type() == Grid.POWER_UP:
-                new_grid.consume()
                 self.powered_up = True
                 self.power_duration = 20
+
+            new_grid.consume()
+            self.has_moved = True
+            self.x = next_x
+            self.y = next_y
     
     def final_update(self):
+        self.has_moved = False
         if powered_up:
             self.power_duration -= 1
 
