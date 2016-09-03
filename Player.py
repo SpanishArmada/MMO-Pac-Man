@@ -20,8 +20,7 @@ class Player:
         self.has_moved = False
         self.is_dead = False
         self.game_engine = game_engine
-        self.ghost_score = 200
-
+        
         T = game_engine.arena.take(x, y)
         self.add_score(T)
 
@@ -101,12 +100,16 @@ class Player:
                     self.is_dead = True
 
         if not self.is_dead:
+            self.power_duration = max(0, self.power_duration - 1)
+            self.powered_up = self.power_duration > 0
+
             T = arena.take(next_x, next_y)
+
             if T == Grid.PILL or T == Grid.CHERRY:    
                 self.add_score(T)
             elif T == Grid.POWER_UP:
+                self.add_score(T)
                 self.powered_up = True
-                self.ghost_score = 200
                 self.power_duration = 20
 
         self.has_moved = True
@@ -115,8 +118,8 @@ class Player:
     
     def early_update(self):
         self.has_moved = False
-        self.power_duration = max(0, self.power_duration - 1)
-        self.powered_up = self.power_duration > 0
+        # self.power_duration = max(0, self.power_duration - 1)
+        # self.powered_up = self.power_duration > 0
 
     def add_score(self, case):
         if case == Player.PILL:
@@ -126,7 +129,6 @@ class Player:
         elif case == Player.CHERRY:
             self.score += 100
         elif case == Player.GHOST:
-            self.score += self.ghost_score
-            self.ghost_score *= 2
+            self.score += 200
         elif case == Player.OTHER_PLAYER:
             self.score += 400
