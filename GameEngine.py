@@ -26,7 +26,7 @@ class GameEngine:
             player.early_update()
         
         for ghost in self.ghosts.values():
-            print("Bagus")
+            # print("Bagus")
             ghost.early_update()
 
         print("self.players are %s" % self.players)

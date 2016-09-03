@@ -38,11 +38,11 @@ class Ghost:
         return self.y
 
     def update(self):
-        arena = self.game_engine
+        arena = self.game_engine.get_arena()
         next_x = self.get_next_x()
         next_y = self.get_next_y()
         new_grid = arena[next_x, next_y]
-        arr = filter(new_grid.get_objects_on_top(), lambda obj: self != obj)
+        arr = filter(lambda obj: self != obj, new_grid.get_objects_on_top())
 
         for obj in arr:
             obj_new_x, obj_new_y = obj.get_next_x(), obj.get_new_y()
