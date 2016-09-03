@@ -16,3 +16,11 @@ class Ghost:
         ori = 0
         self.game_engine = game_engine
         
+    def get_x(self):
+        return self.x
+    
+    def get_y(self):
+        return self.y
+
+    def get_id(self):
+        return self.id
