@@ -35,8 +35,8 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
         if(self not in list_of_clients):
             counter += 1
             list_of_clients.append([self, counter])
-            player_x = 1000
-            player_y = 1000
+            player_x = randint(950, 1050)
+            player_y = randint(950, 1050)
             GE.add_player(counter, "dummy_name", player_x, player_y)
             msg = {"type": 0, "player_id": counter, "x": player_x, "y": player_y}
             self.callback = PeriodicCallback(self.update_client, 500)
@@ -116,7 +116,7 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                     x.name = player_name
                     p = x
                     break
-                    
+
             row = p.get_x()
             col = p.get_y()
 
@@ -214,8 +214,8 @@ if __name__ == "__main__":
                         break
                 GE.add_ghost(ghost_counter, ghost_counter % 4, ghost_col, ghost_row)
                 ghost_counter += 1
+    print("done")
     GE.start()
-    update_food()
     app = make_app()
     app.listen(8888)
     tornado.ioloop.IOLoop.current().start()
