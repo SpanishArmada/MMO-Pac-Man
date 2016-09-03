@@ -1,11 +1,10 @@
 import random
+import Grid
 
 class Ghost:
 
     #Attribute
-    
-
-
+    orientation_choices = [0, 1, 2, 3]
 
     #Method
 
@@ -13,7 +12,7 @@ class Ghost:
         self.id = id
         self.x = x
         self.y = y
-        self.ori = 0
+        self.orientation = 0
         self.game_engine = game_engine
         
     def get_x(self):
@@ -26,37 +25,27 @@ class Ghost:
         return self.id
     
     def get_next_x(self):
-        next_x = self.x
-        if(self.ori ==1):
-            next_x -= 1
-        elif(self.ori ==3):
-            next_x += 1
-        return next_x
+        if self.orientation == 1:
+            return self.x - 1
+        elif self.orientation == 3:
+            return self.y + 1
+        return self.x
     
     def get_next_y(self):
-        next_y = self.y
-        if(self.ori == 0):
-            next_y -= 1
-        elif(self.ori ==2):
-            next_y += 1
-        return next_y
+        if self.orientation == 0:
+            return self.y - 1
+        elif self.orientation == 2:
+            return self.y + 1
+        return self.y
 
     def set_random_orientation(self):
-        choices = [0, 1, 2, 3]
         arena = game_engine.__arena
-        new_x = 0
-        new_y = 0
-        self.ori = random.choice(choices)
-        while(True):
+        self.orientation = random.choice(orientation_choices)
+        while True:
             new_x = get_next_x()
             new_y = get_next_y()
-            if(arena.grids[new_x][new_y].get_typ() != 4):
+            if arena.grids[new_x][new_y].get_typ() != Grid.WALL:
                 break
-            self.ori = random.choice(choices)
+            self.ori = random.choice(orientation_choices)
         self.x = new_x
         self.y = new_y
-
-
-            
-
-
