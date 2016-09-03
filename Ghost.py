@@ -4,13 +4,13 @@ class Player:
 
     #Attribute
     next_id = 0
-    self.id = next_id
+    id = next_id
     next_id = next_id + 1
 
-    self.x = -1
-    self.y = -1
-    self.ori = 0
-    self.game_engine = None
+    x = -1
+    y = -1
+    ori = 0
+    game_engine = None
 
 
     #Method

@@ -1,8 +1,8 @@
 class Grid:
 
-    self.x = -1
-    self.y = -1
-    self.typ = 0
+    x = -1
+    y = -1
+    typ = 0
 
     def __init__(self, x=-1, y=-1):
         self.x = x

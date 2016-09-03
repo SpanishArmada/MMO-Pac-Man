@@ -4,8 +4,8 @@ import GameEngine
 class Arena:
 
     #Attribute
-    self.grids = []
-    self.game_engine = None
+    grids = []
+    game_engine = None
 
     #Method
 
