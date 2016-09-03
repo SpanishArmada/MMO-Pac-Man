@@ -57,10 +57,10 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             col = p.get_y()
             player_name = p.name
 
-            left_boundary = col - 9
-            right_boundary = col + 9
-            top_boundary = row - 16
-            bottom_boundary = row + 16
+            left_boundary = col - 16
+            right_boundary = col + 16
+            top_boundary = row - 9
+            bottom_boundary = row + 9
             local_grids = GE.get_arena().grids[top_boundary:bottom_boundary+1]
             
             grids = []
@@ -117,10 +117,10 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                     p = x
                     break
                     
-            left_boundary = col - 9
-            right_boundary = col + 9
-            top_boundary = row - 16
-            bottom_boundary = row + 16
+            left_boundary = col - 16
+            right_boundary = col + 16
+            top_boundary = row - 9
+            bottom_boundary = row + 9
             local_grids = GE.get_arena().grids[top_boundary:bottom_boundary+1]
             
             if(arrow != 4):
