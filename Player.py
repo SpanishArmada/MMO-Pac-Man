@@ -14,6 +14,7 @@ class Player:
         self.ori = 0
         self.score = 0
         self.power_up = False
+        self.power_duration = 0
         self.game_engine = game_engine
 
     def get_x(self):
@@ -49,32 +50,33 @@ class Player:
     def get_next_x(self):
         next_x = self.x
         if(self.ori ==1):
-            new_x -= 1
+            next_x -= 1
         elif(self.ori ==3):
-            new_x += 1
+            next_x += 1
         return next_x
     
     def get_next_y(self):
         next_y = self.y
         if(self.ori == 0):
-            new_y -= 1
+            next_y -= 1
         elif(self.ori ==2):
-            new_y += 1
+            next_y += 1
         return next_y
 
     def move_forward(self):
         new_x = get_next_x()
         new_y = get_next_y()
-        new_grid  = self.game_engine.get_arena().get_grid(new_x, new_y)
-        if(new_grid.get_typ() == 1 or new_grid.get_typ() == 3):
-            calculate_score(new_grid.get_typ())
-        elif(new_grid.get_typ() == 2):
-            self.power_up = True
-        new_grid.set_typ(0);
-        return False
+
+        return process_player(new_x, new_y)
+
+    def process_player(self, next_x, next_y):
+        new_grid  = self.game_engine.get_arena().get_grid(next_x, next_y)
+
 
     def calculate_score(self, additional):
         if(additional == 1):
             self.score += 10
         elif(additional == 3):
             self.score += 100
+        elif(additional == 5):
+            self.score += 200

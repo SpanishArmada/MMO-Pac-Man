@@ -5,8 +5,8 @@ class Grid:
         self.x = x
         self.y = y
         self.typ = 0
-        self.ghosts = 0
-        self.player = 0
+        self.ghosts = []
+        self.player = []
 
     def get_x(self):
         return self.x
@@ -30,14 +30,14 @@ class Grid:
     def set_typ(self, typ):
         self.typ = typ
     
-    def ghost_come(self):
-        self.ghosts += 1
+    def ghost_come(self, ghost):
+        self.ghosts.append(ghost)
 
-    def ghost_leave(self):
-        self.ghosts -= 1
+    def ghost_leave(self, ghost):
+        self.ghosts.remove(ghost)
 
     def player_come(self):
-        self.players += 1
+        self.players.append(player)
 
     def player_leave(self):
-        self.players -= 1
+        self.players.remove(player)

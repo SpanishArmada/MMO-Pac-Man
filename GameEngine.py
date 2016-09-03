@@ -21,8 +21,7 @@ class GameEngine:
             ghost.set_random_orientation()
 
         for player in self.__players:
-            if player.can_move_forward():
-                player.move_forward()
+            player.move_forward()
 
         for ghost in self.__ghosts:
             ghost.move_forward()
