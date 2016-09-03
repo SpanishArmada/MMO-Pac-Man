@@ -22,7 +22,10 @@ class Arena:
         self.generate()
         print("done")
 
-        self.__emptied_grids = {}
+        # self.__emptied_grids = {}
+        self.__next_update = 100
+        self.__power_up_spawn_chance = 0.001
+        self.__pill_spawn_chance = self.__power_up_spawn_chance + 0.75
 
         self.__init_power_up_spawn_chance = 0.001
 
@@ -123,18 +126,35 @@ class Arena:
         return self.grids[y][x]
 
     def late_update(self):
-        temp = []
-        for (x, y), t in self.__emptied_grids.items():
-            if t <= 0:
-                self[x, y].set_type(Grid.PILL)
-                temp.append((x, y, ))
-            else:
-                self.__emptied_grids[x, y] = t - 1
+        # temp = []
+        # for (x, y), t in self.__emptied_grids.items():
+        #     if t <= 0:
+        #         self[x, y].set_type(Grid.PILL)
+        #         temp.append((x, y, ))
+        #     else:
+        #         self.__emptied_grids[x, y] = t - 1
         
         # Preventing RTE
-        for key in temp:
-            del self.__emptied_grids[key]
-    
+        # for key in temp:
+        #     del self.__emptied_grids[key]
+
+        if self.__next_update <= 0:
+            self.__next_update = random.randint(50, 100)
+
+            r = random.random()
+            for i in range(1, self.height):
+                for j in range(1, self.width):
+                    if self[i, j].get_type() != Grid.EMPTY:
+                        continue
+
+                    if r < self.__power_up_spawn_chance:
+                        self[i, j].set_type(Grid.POWER_UP)
+                    elif r < self.__pill_spawn_chance:
+                        self[i, j].set_type(Grid.PILL)
+
+        else:
+            self.__next_update = self.__next_update - 1
+
     def take(self, x, y):
         T = self[x, y].consume()
 
