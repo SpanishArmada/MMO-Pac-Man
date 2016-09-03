@@ -30,6 +30,8 @@ class GameEngine:
         for ghost in self.ghosts.values():
             ghost.update()
 
+        self.arena.late_update()
+
     def start(self):
         self.__timer.start()
 
