@@ -5,28 +5,30 @@ from threading import Timer
 import random
 
 class GameEngine:
-    def __init__(self):
+    def __init__(self, arena_width=2001, arena_height=2001, max_num_ghost=35000):
+        self.arena_width = arena_width
+        self.arena_height = arena_height
+        self.max_num_ghost = max_num_ghost
+        
         self.players = {}
-        self.arena = Arena(self, 2001, 2001)
+        self.arena = Arena(self, arena_width, arena_height)
         self.ghosts = {}
 
         self.__sec_per_tick = .5
         self.__timer = Timer(self.__sec_per_tick, self.update)
 
     def update(self):
-        for pid, player in self.players:
+        for player in self.players.values():
             player.early_update()
         
-        for gid, ghost in self.ghosts:
+        for ghost in self.ghosts.values():
             ghost.early_update()
 
-        for pid, player in self.players:
+        for player in self.players.values():
             player.update()
 
-        for gid, ghost in self.ghosts:
+        for ghost in self.ghosts.values():
             ghost.update()
-
-        
 
     def start(self):
         self.__timer.start()
