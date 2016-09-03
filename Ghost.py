@@ -69,6 +69,9 @@ class Ghost:
     def early_update(self):
         self.has_moved = False
         
+        if self.get_next_x() != self.x or self.get_next_y != self.y:
+            return
+
         arena = self.game_engine.arena
 
         possible_direction = []
