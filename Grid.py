@@ -34,11 +34,11 @@ class Grid:
         self.__type = T
     
     def consume(self):
-        if self.__type == WALL:
+        if self.__type == Grid.WALL:
             raise Exception('You cannot consume wall!')
         
         T = self.__type
-        self.__type = EMPTY
+        self.__type = Grid.EMPTY
         return T
 
     def __repr__(self):

@@ -1,7 +1,6 @@
 import tornado.ioloop
 import tornado.web
 import tornado.websocket
-import os
 import json
 from GameEngine import GameEngine
 from Arena import Arena
@@ -198,8 +197,6 @@ def make_app():
     ])
 
 if __name__ == "__main__":
-    global counter
-    global GE
     GE = GameEngine()
     
     ghost_counter = 1
