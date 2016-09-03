@@ -5,19 +5,39 @@ class Grid:
         self.x = x
         self.y = y
         self.typ = 0
+        self.ghosts = 0
+        self.player = 0
 
-    def getX(self):
+    def get_x(self):
         return self.x
 
-    def getY(self):
+    def get_y(self):
         return self.y
 
-    def getTyp(self):
+    def get_typ(self):
         return self.typ
 
-    def setPos(self, x, y):
+    def get_ghosts(self):
+        return self.ghosts
+
+    def get_players(self):
+        return self.player
+
+    def set_pos(self, x, y):
         self.x = x
         self.y = y
 
-    def setTyp(self, typ):
+    def set_typ(self, typ):
         self.typ = typ
+    
+    def ghost_come(self):
+        self.ghosts += 1
+
+    def ghost_leave(self):
+        self.ghosts -= 1
+
+    def player_come(self):
+        self.players += 1
+
+    def player_leave(self):
+        self.players -= 1

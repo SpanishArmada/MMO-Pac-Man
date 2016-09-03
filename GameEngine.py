@@ -16,13 +16,18 @@ class GameEngine:
         for player in self.__players:
             if player.has_pressed_arrow_key():
                 player.change_orientation(arrow_key)
-        
+
+        for ghost in self.__ghosts:
+            ghost.set_random_orientation()
+
         for player in self.__players:
             if player.can_move_forward():
                 player.move_forward()
 
         for ghost in self.__ghosts:
-            ghost.move_randomly()
+            ghost.move_forward()
+
+        
 
     def start(self):
         self.__timer.start()

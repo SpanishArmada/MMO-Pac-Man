@@ -17,9 +17,9 @@ class Arena:
     def generate_map(self):
         return None
 
-    def get_grid_typ(self, x, y):
-        return self.grids[x][y].get_typ
+    def get_grid(self, x, y):
+        return self.grids[x][y]
 
-    def set_grid_typ(self, x, y, typ):
-        self.grids[x][y].set_typ(typ)
+    def set_grid(self, grid):
+        self.grids[x][y] = grid
         
