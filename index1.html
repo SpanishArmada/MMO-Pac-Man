@@ -1,0 +1,30 @@
+<html>
+<script>
+    var ws = new WebSocket("ws://localhost:8888/ws");
+    ws.onopen = function() {
+        // pass row and col here
+        ws.send(JSON.stringify({row : 1, col : 7}));
+    };
+    ws.onmessage = function (evt) {
+        //alert(evt.data);
+        data = JSON.parse(evt.data);
+
+        /*
+        data.grids to access grids information
+            0 = empty grid
+            1 = normal food
+            2 = power up
+            3 = cherry
+            4 = wall
+
+        data.pacPos to access pacman positions
+
+        data.ghostPos to access ghost positions
+        */
+		pac1.innerHTML = data.pacPos["p1"];
+        pac2.innerHTML = data.pacPos["p2"];
+    };
+</script>
+<h1 id="pac1">5</h1>
+<h1 id="pac2">5</h1>
+</html>
