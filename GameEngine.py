@@ -5,21 +5,21 @@ from threading import Timer
 
 class GameEngine:
     def __init__(self):
-        self.__players = {}
-        self.__arena = Arena(self, 2001, 2001)
-        self.__ghosts = {}
+        self.players = {}
+        self.arena = Arena(self, 2001, 2001)
+        self.ghosts = {}
 
         self.__sec_per_tick = .5
         self.__timer = Timer(self.__sec_per_tick, self.update)
 
     def update(self):
-        for player in self.__players:
+        for player in self.players:
             player.early_update()
 
-        for player in self.__players:
+        for player in self.players:
             player.update();
 
-        for ghost in self.__ghosts:
+        for ghost in self.ghosts:
             ghost.update()
 
     def start(self):
@@ -29,28 +29,34 @@ class GameEngine:
         self.__timer.stop()
 
     def get_arena(self):
-        return self.__arena
+        return self.arena
 
     def get_players(self):
-        return self.__players
+        return self.players.values()
 
     def get_player(self, pid):
-        return self.__players[pid]
+        return self.players[pid]
 
     def get_ghosts(self):
-        return self.__ghosts
+        return self.ghosts.values()
 
     def get_sec_per_tick(self):
         return self.__sec_per_tick
+    
+    def add_player(self, counter, name, x, y):
+        self.players[counter] = Player(self, counter, name, x, y)
 
+    def add_ghost(self, counter, ghost_type, y, x):
+        self.ghosts[counter] = Ghost(self, counter, ghost_type, y, x)
+    
     def new_player(self, player):
-        self.__players[player.get_id()] = player
+        self.players[player.get_id()] = player
 
     def new_ghost(self):
         pass
 
     def delete_player(self, pid):
-        del self.__players[pid]
+        del self.players[pid]
 
     def delete_ghost(self, gid):
-        del self.__ghosts[gid]
+        del self.ghosts[gid]

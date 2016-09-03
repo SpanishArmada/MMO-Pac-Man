@@ -36,19 +36,20 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             list_of_clients.append([self, counter])
             player_x = 1000
             player_y = 1000
-            players.append(Player(GE, counter, "dummy_name", player_x, player_y))
+            GE.add_player(counter, "dummy_name", player_x, player_y)
             msg = {"type": 0, "player_id": counter, "x": player_x, "y": player_y}
-            self.callback = PeriodicCallback(self.update_client, 250)
+            self.callback = PeriodicCallback(self.update_client, 500)
             self.callback.start()
             self.write_message(msg)
 
     def update_client(self):
         global list_of_clients
+        global GE
         print(list_of_clients)
         for d in list_of_clients:
             player_id = d[1]
             p = None
-            for x in players:
+            for x in GE.get_players():
                 if x.get_id() == player_id:
                     p = x
                     break
@@ -80,13 +81,13 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
 
             pac_pos = dict()
             ghost_pos = dict()
-            for i in players:
+            for i in GE.get_players():
                 player_row = i.get_y()
                 player_col = i.get_x()
                 if(left_boundary <= player_col <= right_boundary and top_boundary <= player_row <= bottom_boundary):
                     pac_pos[str(i.get_id())] = {"x": i.get_x(), "y": i.get_y(), "orientation": i.orientation, "player_name": i.name}
 
-            for i in ghosts:
+            for i in GE.get_ghosts():
                 ghost_row = i.get_y()
                 ghost_col = i.get_x()
                 if(left_boundary <= ghost_col <= right_boundary and top_boundary <= ghost_row <= bottom_boundary):
@@ -111,7 +112,7 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             arrow = incoming_data["arrow"]
             
             p = None
-            for x in players:
+            for x in GE.get_players():
                 if x.get_id() == player_id:
                     x.name = player_name
                     p = x
@@ -143,19 +144,19 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             print(grids)
             pac_pos = dict()
             ghost_pos = dict()
-            for i in players:
+            for i in GE.get_players():
                 player_row = i.get_y()
                 player_col = i.get_x()
                 if(left_boundary <= player_col <= right_boundary and top_boundary <= player_row <= bottom_boundary):
                     pac_pos[str(i.get_id())] = {"x": i.get_x(), "y": i.get_y(), "orientation": i.orientation, "player_name": i.name}
-
-            for i in ghosts:
+            #print(left_boundary, right_boundary, top_boundary, bottom_boundary)
+            for i in GE.get_ghosts():
                 ghost_row = i.get_y()
                 ghost_col = i.get_x()
                 if(left_boundary <= ghost_col <= right_boundary and top_boundary <= ghost_row <= bottom_boundary):
+                    print(i.get_x(), i.get_y())
                     ghost_pos[str(i.get_id())] = {"x": i.get_x(), "y": i.get_y(), "orientation": i.orientation, "ghost_type": i.ghost_type}
-
-            print(len(players))
+            
             if(p.is_dead):
                 data = {"type": 2}
             else:
@@ -167,16 +168,17 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             player_id = incoming_data["player_id"]
             print("delete", player_id)
             p = None
-            for x in players:
+            for x in GE.get_players():
                 if x.get_id() == player_id:
                     p = x
                     break
-            players.remove(p)
+            GE.delete_player(p.get_id())
             global list_of_clients
             for i in list_of_clients:
                 if(i[0] == self):
                     self.callback.stop()
                     list_of_clients.remove(i)
+                    print("removed!")
                     break
 
     def on_close(self):
@@ -208,11 +210,9 @@ if __name__ == "__main__":
                     ghost_col = randint(j, min(j+32, 1999))
                     if(GE.get_arena().grids[ghost_row][ghost_col].get_type() != 4):
                         break
-                ghosts.append(Ghost(GE, ghost_counter, ghost_counter % 4, ghost_col, ghost_row))
+                GE.add_ghost(ghost_counter, ghost_counter % 4, ghost_col, ghost_row)
                 ghost_counter += 1
-    print(ghosts[0].get_x(), ghosts[0].get_y())
-    print(ghost_counter)
-    print(ghosts[10000].get_x(), ghosts[10000].get_y())
+    
     app = make_app()
     app.listen(8888)
     tornado.ioloop.IOLoop.current().start()
