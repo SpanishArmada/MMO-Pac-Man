@@ -14,7 +14,7 @@ class Player:
         self.powered_up = False
         self.power_duration = 0
         self.has_moved = False
-        self.is_death = False
+        self.is_dead = False
         self.game_engine = game_engine
 
     def get_x(self):
@@ -91,14 +91,14 @@ class Player:
                         continue
                     elif obj.has_moved:
                         obj.calculate_score(7)
-                        self.is_death = True
+                        self.is_dead = True
                     elif ((obj_new_x == next_x) and (obj_new_y == next_y)) or ((obj_new_x == self.x) and (obj_new_y == self.y)):
                         obj.calculate_score(7)
-                        self.is_death = True
+                        self.is_dead = True
                 elif ((obj_new_x == next_x) and (obj_new_y == next_y)) or ((obj_new_x == self.x) and (obj_new_y == self.y)):
-                    self.is_death = True
+                    self.is_dead = True
 
-        if not self.is_death:
+        if not self.is_dead:
             if (new_grid.get_type() == Grid.PILL) or (new_grid.get_type() == Grid.CHERRY):    
                 self.calculate_score(new_grid.get_type())
             elif new_grid.get_type() == Grid.POWER_UP:
