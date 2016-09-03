@@ -10,7 +10,7 @@ from Ghost import Ghost
 from random import randint
 from tornado.ioloop import PeriodicCallback
 
-data = []
+list_of_clients = []
 players = []
 ghosts = []
 counter = 0
@@ -30,10 +30,10 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
         return True
     def open(self):
         global counter
-        global data
-        if(self not in data):
+        global list_of_clients
+        if(self not in list_of_clients):
             counter += 1
-            data.append([self, counter])
+            list_of_clients.append([self, counter])
             player_x = 1
             player_y = 1
             players.append(Player(GE, counter, "dummy_name", player_x, player_y))
@@ -43,8 +43,9 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             self.write_message(msg)
 
     def update_client(self):
-        global data
-        for d in data:
+        global list_of_clients
+        print(list_of_clients)
+        for d in list_of_clients:
             player_id = d[1]
             p = None
             for x in players:
@@ -121,7 +122,7 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             bottom_boundary = row + 16
             local_grids = GE.get_arena().grids[top_boundary:bottom_boundary+1]
             
-            p.has_pressed_arrow_key(arrow)
+            p.pressed_arrow_key(arrow)
 
             grids = []
             food_pos = []
@@ -171,8 +172,8 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             players.remove(p)
 
     def on_close(self):
-        if self in data:
-            data.remove(self)
+        if self in list_of_clients:
+            list_of_clients.remove(self)
             
 
 def make_app():
