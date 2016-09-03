@@ -63,7 +63,7 @@ class Player:
         next_x = self.get_next_x()
         next_y = self.get_next_y()
         new_grid = arena[next_x, next_y]
-        arr = filter(new_grid.get_objects_on_top(), lambda obj: return self != obj)
+        arr = filter(new_grid.get_objects_on_top(), lambda obj: self != obj)
 
         if powered_up:
             for obj in arr:
