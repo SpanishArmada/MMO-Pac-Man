@@ -17,6 +17,9 @@ class Player:
         self.is_dead = False
         self.game_engine = game_engine
 
+        T = game_engine.get_arena()[x, y].consume()
+        self.calculate_score(T)
+
     def get_x(self):
         return self.x
     
@@ -36,11 +39,7 @@ class Player:
         return self.powered_up
 
     def pressed_arrow_key(self, arrow_key):
-        # Not yet implemented
-        return False
-
-    def change_orientation(self, ori):
-        self.orientation = orientation
+        self.orientation = arrow_key
 
     def get_next_x(self):
         arena = self.game_engine.get_arena()
