@@ -162,6 +162,9 @@ class Arena:
 
         return T
 
-    def move(self, who, new_x, new_y):
+    def lift(self, who):
         self[who.x, who.y].remove_object_on_top(who)
+
+    def move(self, who, new_x, new_y):
+        self.lift(who)
         self[new_x, new_y].insert_object_on_top(who)

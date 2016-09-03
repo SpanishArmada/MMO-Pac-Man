@@ -99,12 +99,17 @@ class Player:
                     self.is_dead = True
 
         if not self.is_dead:
+            arena.move(self, next_x, next_y)
+
             T = arena.take(next_x, next_y)
             if T == Grid.PILL or T == Grid.CHERRY:    
                 self.add_score(T)
             elif T == Grid.POWER_UP:
                 self.powered_up = True
                 self.power_duration = 20
+
+        else:
+            arena.lift(self, next_x, next_y)
 
         arena.move(self, next_x, next_y)
 
