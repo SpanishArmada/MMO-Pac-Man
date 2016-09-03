@@ -10,8 +10,9 @@ class Arena:
         self.game_engine = game_engine
         self.grids = []
         for i in range(x):
-            for i in range(y):
-                self.grids = Grid(x,y)
+            self.grids.append([])
+            for j in range(y):
+                self.grids[i].append(Grid(x,y))
 
     def generate_map(self):
         return None

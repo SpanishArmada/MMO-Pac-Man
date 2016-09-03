@@ -6,7 +6,7 @@ from threading import Timer
 class GameEngine:
     def __init__(self):
         self.__players = {}
-        self.__arena = Arena(self, 5001, 5001)
+        self.__arena = Arena(self, 2001, 2001)
         self.__ghosts = {}
 
         self.__sec_per_tick = .25
