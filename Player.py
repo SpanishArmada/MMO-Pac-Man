@@ -3,7 +3,6 @@ from Grid import Grid
 class Player:
     #Attribute
     PILL = Grid.PILL
-    POWER_UP = Grid.POWER_UP
     CHERRY = Grid.CHERRY
     GHOST = 10
     OTHER_PLAYER = 11
@@ -16,12 +15,12 @@ class Player:
         self.y = y
         self.orientation = 0
         self.score = 0
-        self.ghost_score = 200
         self.powered_up = False
         self.power_duration = 0
         self.has_moved = False
         self.is_dead = False
         self.game_engine = game_engine
+        self.ghost_score = 200
 
         T = game_engine.arena.take(x, y)
         self.add_score(T)
@@ -49,17 +48,17 @@ class Player:
 
     def get_next_x(self):
         arena = self.game_engine.arena
-        if self.orientation == 1 and arena[self.x - 1, self.y].get_type() != Grid.WALL:
+        if self.orientation == 0 and arena[self.x - 1, self.y].get_type() != Grid.WALL:
             return self.x - 1
-        elif self.orientation == 3 and arena[self.x + 1, self.y].get_type() != Grid.WALL:
+        elif self.orientation == 2 and arena[self.x + 1, self.y].get_type() != Grid.WALL:
             return self.x + 1
         return self.x
     
     def get_next_y(self):
         arena = self.game_engine.arena
-        if self.orientation == 0 and arena[self.x, self.y - 1].get_type() != Grid.WALL:
+        if self.orientation == 1 and arena[self.x, self.y - 1].get_type() != Grid.WALL:
             return self.y - 1
-        elif self.orientation == 2 and arena[self.x, self.y + 1].get_type() != Grid.WALL:
+        elif self.orientation == 3 and arena[self.x, self.y + 1].get_type() != Grid.WALL:
             return self.y + 1
         return self.y
 
@@ -122,7 +121,7 @@ class Player:
     def add_score(self, case):
         if case == Player.PILL:
             self.score += 10
-        elif case == Player.POWER_UP:
+        elif case == Grid.POWER_UP:
             self.score += 50
         elif case == Player.CHERRY:
             self.score += 100
