@@ -21,7 +21,7 @@ class Arena:
                 self.grids[i].append(Grid(j, i, Grid.WALL))
         self.__next_update = 100
         self.__power_up_spawn_chance = 0.001
-        self.__pill_spawn_chance = self.__power_up_spawn_chance + 0.75
+        self.__pill_spawn_chance = self.__power_up_spawn_chance + 0.60
         self.__init_pup_chance = 0.001
         self.generate()
         print("done")
