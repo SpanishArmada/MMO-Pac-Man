@@ -1,8 +1,12 @@
-import Grid
+from Grid import Grid
 
 class Player:
     #Attribute
-
+    PILL = Grid.PILL
+    CHERRY = Grid.CHERRY
+    GHOST = 10
+    OTHER_PLAYER = 11
+    
     #Method
     def __init__(self, game_engine, id, name, x, y):
         self.id = id
@@ -17,8 +21,8 @@ class Player:
         self.is_dead = False
         self.game_engine = game_engine
 
-        T = game_engine.get_arena()[x, y].consume()
-        self.calculate_score(T)
+        T = game_engine.arena.take(x, y)
+        self.add_score(T)
 
     def get_x(self):
         return self.x
@@ -42,7 +46,7 @@ class Player:
         self.orientation = arrow_key
 
     def get_next_x(self):
-        arena = self.game_engine.get_arena()
+        arena = self.game_engine.arena
         if self.orientation == 1 and arena[self.x - 1, self.y].get_type() != Grid.WALL:
             return self.x - 1
         elif self.orientation == 3 and arena[self.x + 1, self.y].get_type() != Grid.WALL:
@@ -50,7 +54,7 @@ class Player:
         return self.x
     
     def get_next_y(self):
-        arena = self.game_engine.get_arena()
+        arena = self.game_engine.arena
         if self.orientation == 0 and arena[self.x, self.y - 1].get_type() != Grid.WALL:
             return self.y - 1
         elif self.orientation == 2 and arena[self.x, self.y + 1].get_type() != Grid.WALL:
@@ -64,20 +68,20 @@ class Player:
         new_grid = arena[next_x, next_y]
         arr = filter(new_grid.get_objects_on_top(), lambda obj: self != obj)
 
-        if powered_up:
+        if self.powered_up:
             for obj in arr:
                 obj_new_x, obj_new_y = obj.get_next_x(), obj.get_new_y()
                 if type(obj) == Player:
                     if obj.is_powered_up:
                         continue
                     elif obj.has_moved:
-                        self.calculate_score(7)
+                        self.add_score(OTHER_PLAYER)
                         obj.is_dead = True
                     elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
-                        self.calculate_score(7)
+                        self.add_score(OTHER_PLAYER)
                         obj.is_dead = True
                 elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
-                    self.calculate_score(5)
+                    self.add_score(GHOST)
                     obj.is_dead = True
         else:
             for obj in arr:
@@ -86,18 +90,18 @@ class Player:
                     if not obj.is_powered_up:
                         continue
                     elif obj.has_moved:
-                        obj.calculate_score(7)
+                        obj.add_score(OTHER_PLAYER)
                         self.is_dead = True
                     elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
-                        obj.calculate_score(7)
+                        obj.add_score(OTHER_PLAYER)
                         self.is_dead = True
                 elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
                     self.is_dead = True
 
         if not self.is_dead:
-            T = new_grid.consume()
+            T = arena.take(next_x, next_y)
             if T == Grid.PILL or T == Grid.CHERRY:    
-                self.calculate_score(T)
+                self.add_score(T)
             elif T == Grid.POWER_UP:
                 self.powered_up = True
                 self.power_duration = 20
@@ -111,12 +115,12 @@ class Player:
         self.power_duration = max(0, self.power_duration - 1)
         self.powered_up = self.power_duration > 0
 
-    def calculate_score(self, case):
-        if case == Grid.PILL:
+    def add_score(self, case):
+        if case == PILL:
             self.score += 10
-        elif case == Grid.CHERRY:
+        elif case == CHERRY:
             self.score += 100
-        elif case == 5:
+        elif case == GHOST:
             self.score += 200
-        elif case == 7:
+        elif case == OTHER_PLAYER:
             self.score += 400
