@@ -63,16 +63,22 @@ class GameEngine:
         return self.__sec_per_tick
     
     def add_player(self, counter, name, x, y):
-        self.players[counter] = Player(self, counter, name, x, y)
+        player = Player(self, counter, name, x, y)
+
+        self.players[counter] = player
+        self.arena[x, y].insert_object_on_top(player)
 
     def add_ghost(self, counter, ghost_type, y, x):
-        self.ghosts[counter] = Ghost(self, counter, ghost_type, y, x)
+        ghost = Ghost(self, counter, ghost_type, y, x)
+
+        self.ghosts[counter] = ghost
+        self.arena[x, y].insert_object_on_top(ghost)
     
     def new_player(self, player):
         self.players[player.get_id()] = player
 
     def new_ghost(self):
-        pass
+        raise Exception("Not implemented!")
 
     def delete_player(self, pid):
         del self.players[pid]
