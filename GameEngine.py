@@ -15,11 +15,11 @@ class GameEngine:
         self.ghosts = {}
 
         self.__sec_per_tick = .5
-        self.__timer = Timer(self.__sec_per_tick, self.update)
+        # self.__timer = Timer(self.__sec_per_tick, self.update)
 
     def update(self):
-        self.__timer = Timer(self.__sec_per_tick, self.update)
-        self.__timer.start()
+        # self.__timer = Timer(self.__sec_per_tick, self.update)
+        # self.__timer.start()
         
         for player in self.players.values():
             # print("Gede")
@@ -29,8 +29,6 @@ class GameEngine:
             # print("Bagus")
             ghost.early_update()
 
-        
-
         for player in self.players.values():
             # print("Bayu")
             player.update()
@@ -38,6 +36,14 @@ class GameEngine:
         for ghost in self.ghosts.values():
             # print("Pentium")
             ghost.update()
+
+        for player in self.players.values():
+            if player.is_dead:
+                self.delete_player(player.id)
+
+        for ghost in self.ghosts.values():
+            if ghost.is_dead:
+                self.delete_ghost(ghost.id)
 
         self.arena.late_update()
 
@@ -80,7 +86,11 @@ class GameEngine:
         raise Exception("Not implemented!")
 
     def delete_player(self, pid):
+        p = players[pid]
+        self.arena[p.x, p.y].lift(self)
         del self.players[pid]
 
     def delete_ghost(self, gid):
+        g = ghosts[gid]
+        self.arena[g.x, g.y].lift(self)
         del self.ghosts[gid]

@@ -98,8 +98,9 @@ class Player:
                 elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
                     self.is_dead = True
 
+        arena.move(self, next_x, next_y)
+
         if not self.is_dead:
-            arena.move(self, next_x, next_y)
 
             T = arena.take(next_x, next_y)
             if T == Grid.PILL or T == Grid.CHERRY:    
@@ -107,9 +108,6 @@ class Player:
             elif T == Grid.POWER_UP:
                 self.powered_up = True
                 self.power_duration = 20
-
-        else:
-            arena.lift(self)
 
         self.has_moved = True
 

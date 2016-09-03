@@ -38,11 +38,13 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                     break
             GE.add_player(counter, "dummy_name", player_x, player_y)
             msg = {"type": 0, "player_id": counter, "x": player_x, "y": player_y}
-            self.callback = PeriodicCallback(self.update_client, 300)
+            self.callback = PeriodicCallback(self.update_client, int(100 * GE.__sec_per_tick))
             self.callback.start()
             self.write_message(msg)
 
     def update_client(self):
+        GE.update()
+
         global list_of_clients
         global GE
         for d in list_of_clients:
@@ -163,7 +165,7 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                     ghost_pos[str(i.get_id())] = {"x": i.get_x(), "y": i.get_y(), "orientation": i.orientation, "ghost_type": i.ghost_type}
             
             if(p.is_dead):
-                GE.delete_player(p.get_id())
+                # GE.delete_player(p.get_id())
                 global list_of_clients
                 for i in list_of_clients:
                     if(i[0] == self):
@@ -184,7 +186,10 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                 if x.get_id() == player_id:
                     p = x
                     break
-            GE.delete_player(p.get_id())
+
+            if not p.is_dead:
+                GE.delete_player(p.get_id())
+
             global list_of_clients
             for i in list_of_clients:
                 if(i[0] == self):
