@@ -42,6 +42,7 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
         print(len(players))
         print(len(ghosts))
         print(ghosts[15].get_x())
+        # TODO: send back player id and score
         data = {"grids": grids, "pacPos": pacPos, "ghostPos": ghostPos}
         self.write_message(data)
     def on_close(self):
