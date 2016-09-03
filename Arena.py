@@ -104,13 +104,25 @@ class Arena:
             for j in range(x, next_x + 1):
                 for i in range(y, next_y + 1):
                     self[i, j].set_type(Grid.EMPTY)
+        
         for i in range(self.height):
             for j in range(self.width):
-                if(self[i, j].get_type() == Grid.EMPTY):
+                if self[i, j].get_type() == Grid.EMPTY:
                     self[i, j].set_type(Grid.PILL)
+        
         return True
     
     def get_grid(self, x, y):
         return self.grids[y][x]
 
+    def update(self):
+        pass
     
+    def take(self, x, y):
+        T = self[x, y].consume()
+
+        # If recently emptied
+        if T != Grid.EMPTY and self[x, y].get_type() == Grid.EMPTY:
+            pass
+
+        return T
