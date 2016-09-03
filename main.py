@@ -34,8 +34,8 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
         if(self not in list_of_clients):
             counter += 1
             list_of_clients.append([self, counter])
-            player_x = 1
-            player_y = 1
+            player_x = 1000
+            player_y = 1000
             players.append(Player(GE, counter, "dummy_name", player_x, player_y))
             msg = {"type": 0, "player_id": counter, "x": player_x, "y": player_y}
             self.callback = PeriodicCallback(self.update_client, 250)
@@ -62,7 +62,7 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             top_boundary = row - 16
             bottom_boundary = row + 16
             local_grids = GE.get_arena().grids[top_boundary:bottom_boundary+1]
-
+            
             grids = []
             food_pos = []
             for i in local_grids:
@@ -76,7 +76,8 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                     if(j.get_type() == 1):
                         food_pos.append({"x": j.get_x(), "y": j.get_y()})
                 grids.append(r)
-                
+            
+
             pac_pos = dict()
             ghost_pos = dict()
             for i in players:
@@ -122,7 +123,8 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             bottom_boundary = row + 16
             local_grids = GE.get_arena().grids[top_boundary:bottom_boundary+1]
             
-            p.pressed_arrow_key(arrow)
+            if(arrow != 4):
+                p.pressed_arrow_key(arrow)
 
             grids = []
             food_pos = []
@@ -172,8 +174,11 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             players.remove(p)
 
     def on_close(self):
-        if self in list_of_clients:
-            list_of_clients.remove(self)
+        global list_of_clients
+        for i in list_of_clients:
+            if(i[0] == self):
+                list_of_clients.remove(i)
+                break
             
 
 def make_app():
@@ -186,8 +191,7 @@ if __name__ == "__main__":
     global counter
     global GE
     GE = GameEngine()
-    # for i in range(20):
-    #     ghosts.append(Ghost(GE, i, i, i))
+    
     ghost_counter = 1
     print("in")
     for i in range(0, 2000, 20):
