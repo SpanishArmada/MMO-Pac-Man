@@ -9,6 +9,7 @@ from Player import Player
 from Ghost import Ghost
 from random import randint
 from tornado.ioloop import PeriodicCallback
+import threading
 
 list_of_clients = []
 players = []
@@ -105,8 +106,6 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
         msg_type = incoming_data["type"]
         print(msg_type)
         if(msg_type == 0):
-            row = incoming_data["row"]
-            col = incoming_data["col"]
             player_id = incoming_data["player_id"]
             player_name = incoming_data["player_name"]
             arrow = incoming_data["arrow"]
@@ -118,6 +117,9 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                     p = x
                     break
                     
+            row = p.get_x()
+            col = p.get_y()
+
             left_boundary = col - 16
             right_boundary = col + 16
             top_boundary = row - 9
@@ -213,6 +215,7 @@ if __name__ == "__main__":
                 GE.add_ghost(ghost_counter, ghost_counter % 4, ghost_col, ghost_row)
                 ghost_counter += 1
     GE.start()
+    update_food()
     app = make_app()
     app.listen(8888)
     tornado.ioloop.IOLoop.current().start()
