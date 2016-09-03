@@ -1,12 +1,12 @@
-import Arena
-import Player
-import Ghost
+from Arena import Arena
+from Player import Player
+from Ghost import Ghost
 from threading import Timer
 
 class GameEngine:
     def __init__(self):
         self.__players = {}
-        self.__arena = Arena(5001, 5001)
+        self.__arena = Arena(self, 5001, 5001)
         self.__ghosts = {}
 
         self.__sec_per_tick = .25

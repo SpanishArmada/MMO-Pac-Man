@@ -3,10 +3,12 @@ import tornado.web
 import tornado.websocket
 import os
 import json
-import GameEngine, Arena
+from GameEngine import GameEngine
+from Arena import Arena
 
 data = []
-
+players = []
+ghosts = []
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("index1.html")
@@ -15,7 +17,6 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
     def open(self):
         if(self not in data):
             data.append(self)
-
             
     def on_message(self, msg):
         incomingData = json.loads(msg)
@@ -25,6 +26,7 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
         grids = []
         pacPos = dict()
         ghostPos = dict()
+        
         pacPos["p1"] = 1
         pacPos["p2"] = 2
 
@@ -33,8 +35,6 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
     def on_close(self):
         if self in data:
             data.remove(self)
-
-
 
 def make_app():
     return tornado.web.Application([

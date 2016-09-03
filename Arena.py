@@ -1,5 +1,4 @@
 from Grid import Grid
-from GameEngine import GameEngine
 
 class Arena:
 

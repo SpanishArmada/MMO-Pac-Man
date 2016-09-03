@@ -1,4 +1,4 @@
-from GameEngine import GameEngine
+
 
 class Player:
 
@@ -41,11 +41,11 @@ class Player:
         new_y = y
         if(self.ori == 0):
             new_y -= 1
-        else if(self.ori ==1):
+        elif(self.ori ==1):
             new_x -= 1
-        else if(self.ori ==2):
+        elif(self.ori ==2):
             new_y += 1
-        else if(self.ori ==3):
+        elif(self.ori ==3):
             new_x += 1
 
         if(self.game_engine.get_arena().get_grid_typ(new_x, new_y) == 4):
@@ -54,5 +54,4 @@ class Player:
             return True
 
     def move_forward(self):
-
-        
+        return False
