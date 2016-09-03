@@ -64,6 +64,7 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             
             grids = []
             food_pos = []
+            power_up_pos = []
             for i in local_grids:
                 current_row = i[left_boundary:right_boundary]
                 r = []
@@ -74,6 +75,8 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                         r.append(0)
                     if(j.get_type() == 1):
                         food_pos.append({"x": j.get_x(), "y": j.get_y()})
+                    if(j.get_type() == 2):
+                        power_up_pos.append({"x": j.get_x(), "y": j.get_y()})
                 grids.append(r)
             
 
@@ -129,6 +132,7 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
 
             grids = []
             food_pos = []
+            power_up_pos = []
             for i in local_grids:
                 current_row = i[left_boundary:right_boundary]
                 r = []
@@ -139,6 +143,8 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                         r.append(0)
                     if(j.get_type() == 1):
                         food_pos.append({"x": j.get_x(), "y": j.get_y()})
+                    if(j.get_type() == 2):
+                        power_up_pos.append({"x": j.get_x(), "y": j.get_y()})
                 grids.append(r)
                 
             pac_pos = dict()
