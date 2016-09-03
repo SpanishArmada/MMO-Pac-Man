@@ -39,11 +39,7 @@ class Player:
         return self.powered_up
 
     def pressed_arrow_key(self, arrow_key):
-        # Not yet implemented
         self.orientation = arrow_key
-
-    def change_orientation(self, ori):
-        self.orientation = orientation
 
     def get_next_x(self):
         arena = self.game_engine.get_arena()

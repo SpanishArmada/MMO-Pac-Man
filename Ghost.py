@@ -70,6 +70,7 @@ class Ghost:
 
     def early_update(self):
         self.has_moved = False
+        self.set_random_orientation()
 
     def set_random_orientation(self):
         arena = game_engine.__arena
