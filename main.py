@@ -1,7 +1,6 @@
 import tornado.ioloop
 import tornado.web
 import tornado.websocket
-import os
 import json
 from GameEngine import GameEngine
 from Arena import Arena
@@ -35,8 +34,12 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
         if(self not in list_of_clients):
             counter += 1
             list_of_clients.append([self, counter])
-            player_x = randint(950, 1050)
-            player_y = randint(950, 1050)
+            while(True):
+                player_x = randint(950, 1050)
+                player_y = randint(950, 1050)
+                current_grid = GE.arena.get_grid(player_x, player_y) 
+                if(current_grid.get_type() != 4 and len(current_grid.get_objects_on_top()) == 0):
+                    break
             GE.add_player(counter, "dummy_name", player_x, player_y)
             msg = {"type": 0, "player_id": counter, "x": player_x, "y": player_y}
             self.callback = PeriodicCallback(self.update_client, 500)
@@ -198,8 +201,6 @@ def make_app():
     ])
 
 if __name__ == "__main__":
-    global counter
-    global GE
     GE = GameEngine()
     
     ghost_counter = 1
