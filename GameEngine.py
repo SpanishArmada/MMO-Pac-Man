@@ -5,7 +5,7 @@ from threading import Timer
 import random
 
 class GameEngine:
-    def __init__(self, arena_width=2001, arena_height=2001, max_num_ghost=35000):
+    def __init__(self, arena_width=501, arena_height=501, max_num_ghost=35000):
         self.arena_width = arena_width
         self.arena_height = arena_height
         self.max_num_ghost = max_num_ghost
@@ -29,7 +29,7 @@ class GameEngine:
             # print("Bagus")
             ghost.early_update()
 
-        print("self.players are %s" % self.players)
+        
 
         for player in self.players.values():
             # print("Bayu")

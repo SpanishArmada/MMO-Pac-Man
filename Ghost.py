@@ -69,7 +69,7 @@ class Ghost:
     def early_update(self):
         self.has_moved = False
         
-        if self.get_next_x() == self.x and self.get_next_y == self.y:
+        if self.get_next_x() == self.x and self.get_next_y() == self.y:
             
             arena = self.game_engine.arena
 

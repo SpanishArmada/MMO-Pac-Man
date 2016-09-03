@@ -31,8 +31,8 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             counter += 1
             list_of_clients.append([self, counter])
             while(True):
-                player_x = randint(950, 1050)
-                player_y = randint(950, 1050)
+                player_x = randint(270, 320)
+                player_y = randint(270, 320)
                 current_grid = GE.arena.get_grid(player_x, player_y) 
                 if(current_grid.get_type() != 4 and len(current_grid.get_objects_on_top()) == 0):
                     break
@@ -45,7 +45,7 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
         global counter
         incoming_data = json.loads(msg)
         msg_type = incoming_data["type"]
-        print(msg_type)
+        
         if(msg_type == 0):
             player_id = incoming_data["player_id"]
             player_name = incoming_data["player_name"]
@@ -97,7 +97,7 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                 ghost_row = i.get_y()
                 ghost_col = i.get_x()
                 if(left_boundary <= ghost_col <= right_boundary and top_boundary <= ghost_row <= bottom_boundary):
-                    print(i.get_x(), i.get_y())
+                    
                     ghost_pos[str(i.get_id())] = {"x": i.get_x(), "y": i.get_y(), "orientation": i.orientation, "ghost_type": i.ghost_type}
             
             if(p.is_dead):
@@ -107,7 +107,6 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             self.write_message(data)
         else:
             # closed
-            print("in")
             player_id = incoming_data["player_id"]
             print("delete", player_id)
             p = None
@@ -121,7 +120,6 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                 if(i[0] == self):
                     self.callback.stop()
                     list_of_clients.remove(i)
-                    print("removed!")
                     break
 
     def on_close(self):
@@ -200,12 +198,12 @@ if __name__ == "__main__":
     
     ghost_counter = 1
     print("in")
-    for i in range(0, 2000, 20):
-        for j in range(0, 2000, 30):
-            for k in range(3):
+    for i in range(0, 500, 20):
+        for j in range(0, 500, 30):
+            for k in range(2):
                 while(True):
-                    ghost_row = randint(i, min(i+18, 1999))
-                    ghost_col = randint(j, min(j+32, 1999))
+                    ghost_row = randint(i, min(i+18, 499))
+                    ghost_col = randint(j, min(j+32, 499))
                     if(GE.get_arena().grids[ghost_row][ghost_col].get_type() != 4):
                         break
                 GE.add_ghost(ghost_counter, ghost_counter % 4, ghost_col, ghost_row)
