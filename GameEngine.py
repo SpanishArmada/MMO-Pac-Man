@@ -34,7 +34,7 @@ class GameEngine:
         self.__timer.start()
 
     def stop(self):
-        self.__timer.stop()
+        self.__timer.cancel()
 
     def get_arena(self):
         return self.arena

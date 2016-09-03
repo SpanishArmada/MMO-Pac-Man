@@ -62,6 +62,7 @@ class Player:
         return self.y
 
     def update(self):
+        print("I am in")
         arena = self.game_engine
         next_x = self.get_next_x()
         next_y = self.get_next_y()

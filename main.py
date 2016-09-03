@@ -3,12 +3,8 @@ import tornado.web
 import tornado.websocket
 import json
 from GameEngine import GameEngine
-from Arena import Arena
-from Player import Player
-from Ghost import Ghost
 from random import randint
 from tornado.ioloop import PeriodicCallback
-import threading
 
 list_of_clients = []
 players = []
@@ -53,14 +49,13 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
         for d in list_of_clients:
             player_id = d[1]
             p = None
-            for x in GE.get_players():
-                if x.get_id() == player_id:
-                    p = x
+            for player in GE.get_players():
+                if player.get_id() == player_id:
+                    p = player
                     break
             
-            row = p.get_x()
-            col = p.get_y()
-            player_name = p.name
+            row = p.get_y()
+            col = p.get_x()
 
             left_boundary = col - 16
             right_boundary = col + 16
@@ -114,14 +109,14 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             arrow = incoming_data["arrow"]
             
             p = None
-            for x in GE.get_players():
-                if x.get_id() == player_id:
-                    x.name = player_name
-                    p = x
+            for player in GE.get_players():
+                if player.get_id() == player_id:
+                    player.name = player_name
+                    p = player
                     break
 
-            row = p.get_x()
-            col = p.get_y()
+            row = p.get_y()
+            col = p.get_x()
 
             left_boundary = col - 16
             right_boundary = col + 16
