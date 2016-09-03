@@ -1,7 +1,7 @@
 import Grid
 import GameEngine
 
-class ClassName:
+class Arena:
 
     #Attribute
     self.grids = []
