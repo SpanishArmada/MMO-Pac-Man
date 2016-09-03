@@ -18,6 +18,9 @@ class GameEngine:
         self.__timer = Timer(self.__sec_per_tick, self.update)
 
     def update(self):
+        self.__timer = Timer(self.__sec_per_tick, self.update)
+        self.__timer.start()
+        
         for player in self.players.values():
             player.early_update()
         
