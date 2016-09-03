@@ -50,7 +50,7 @@ class Ghost:
         while(True):
             new_x = get_next_x()
             new_y = get_next_y()
-            if(arena[new_x][new_y].get_typ() != 4):
+            if(arena.grids[new_x][new_y].get_typ() != 4):
                 break
             self.ori = random.choice(choices)
         self.x = new_x

@@ -12,7 +12,7 @@ data = []
 players = []
 ghosts = []
 counter = 0
-
+GE = None
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("index1.html")
@@ -36,8 +36,20 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             row = incomingData["row"]
             col = incomingData["col"]
             playerID = incomingData["playerID"]
-
+            print("row", row)
+            localGrids = GE.get_arena().grids[row - 9:row + 10]
+            print("len", len(localGrids))
             grids = []
+            for i in localGrids:
+                currentRow = i[col - 16:col + 17]
+                r = []
+                for j in currentRow:
+                    if(j.get_typ == 4):
+                        r.append(1)
+                    else:
+                        r.append(0)
+                grids.append(r)
+            print(grids)
             pacPos = dict()
             ghostPos = dict()
             for i in players:
@@ -79,6 +91,7 @@ def make_app():
 
 if __name__ == "__main__":
     global counter
+    global GE
     GE = GameEngine()
     for i in range(20):
         ghosts.append(Ghost(GE, i, i, i))
