@@ -212,7 +212,7 @@ if __name__ == "__main__":
                         break
                 GE.add_ghost(ghost_counter, ghost_counter % 4, ghost_col, ghost_row)
                 ghost_counter += 1
-    
+    GE.start()
     app = make_app()
     app.listen(8888)
     tornado.ioloop.IOLoop.current().start()
