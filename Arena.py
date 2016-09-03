@@ -19,12 +19,10 @@ class Arena:
             self.grids.append([])
             for j in range(width):
                 self.grids[i].append(Grid(j, i, Grid.WALL))
-        self.generate()
-        print("done")
 
     def __getitem__(self, p):
         # I strictly expect that parameter 'p' is a tuple of two
-        return self.grids[p[0]][p[1]]
+        return self.grids[p[1]][p[0]]
 
     def in_boundary(self, x, y):
         return 0 <= x < self.width and 0 <= y < self.height
@@ -105,11 +103,9 @@ class Arena:
                 for i in range(y, next_y + 1):
                     self[i, j].set_type(Grid.EMPTY)
         
-        for i in range(self.height):
-            for j in range(self.width):
-                if(self[i, j].get_type() == Grid.EMPTY):
-                    self[i, j].set_type(Grid.PILL)
         return True
     
     def get_grid(self, x, y):
         return self.grids[y][x]
+
+    

@@ -2,6 +2,7 @@ from Arena import Arena
 from Player import Player
 from Ghost import Ghost
 from threading import Timer
+import random
 
 class GameEngine:
     def __init__(self):
@@ -13,14 +14,19 @@ class GameEngine:
         self.__timer = Timer(self.__sec_per_tick, self.update)
 
     def update(self):
-        for player in self.players:
+        for pid, player in self.players:
             player.early_update()
+        
+        for gid, ghost in self.ghosts:
+            ghost.early_update()
 
-        for player in self.players:
-            player.update();
+        for pid, player in self.players:
+            player.update()
 
-        for ghost in self.ghosts:
+        for gid, ghost in self.ghosts:
             ghost.update()
+
+        
 
     def start(self):
         self.__timer.start()
