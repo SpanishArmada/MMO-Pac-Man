@@ -220,7 +220,7 @@ if __name__ == "__main__":
     GE = GameEngine()
     
     ghost_counter = 1
-    print("in")
+    #print("in")
     for i in range(0, 500, 20):
         for j in range(0, 500, 30):
             for k in range(2):
