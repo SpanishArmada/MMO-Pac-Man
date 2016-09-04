@@ -71,7 +71,7 @@ class Player:
         if self.powered_up:
             for obj in arr:
                 obj_new_x, obj_new_y = obj.get_next_x(), obj.get_next_y()
-                if type(obj) == Player:
+                if obj.__class__ is Player:
                     if obj.is_powered_up:
                         continue
                     elif obj.has_moved:
@@ -86,7 +86,7 @@ class Player:
         else:
             for obj in arr:
                 obj_new_x, obj_new_y = obj.get_next_x(), obj.get_next_y()
-                if type(obj) == Player:
+                if obj.__class__ is Player:
                     if not obj.is_powered_up:
                         continue
                     elif obj.has_moved:

@@ -79,11 +79,11 @@ class GameEngine:
         self.players[counter] = player
         self.arena[x, y].insert_object_on_top(player)
 
-    def add_ghost(self, counter, ghost_type, y, x):
-        ghost = Ghost(self, counter, ghost_type, y, x)
+    def add_ghost(self, counter, ghost_type, x, y):
+        ghost = Ghost(self, counter, ghost_type, x, y)
         
         self.ghosts[counter] = ghost
-        self.arena[y, x].insert_object_on_top(ghost)
+        self.arena[x, y].insert_object_on_top(ghost)
     
     def new_player(self, player):
         self.players[player.get_id()] = player
