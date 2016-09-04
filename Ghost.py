@@ -49,7 +49,7 @@ class Ghost:
         for obj in arr:
             obj_new_x, obj_new_y = obj.get_next_x(), obj.get_next_y()
             if type(obj) is Player:
-                if obj.is_powered_up:
+                if obj.powered_up:
                     if obj.has_moved:
                         obj.calculate_score(5)
                         self.is_dead = True
