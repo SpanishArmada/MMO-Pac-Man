@@ -5,6 +5,14 @@ pip install tornado
 ```
 
 ## Running
+```
 python main.py
-Then navigate to `localhost:8888`
-To stop: Ctrl + Pause/break
+```
+Then run the client with
+```
+python -m SimpleHttpClient
+```
+navigate to
+```
+localhost:8000
+```
