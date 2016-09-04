@@ -1,4 +1,8 @@
-# MMO Pac-Man
+# MMO Pac-Man (Server)
+## Requirements
+
+- Python 3
+
 ## Dependencies
 ```
 pip install tornado
@@ -8,11 +12,6 @@ pip install tornado
 ```
 python main.py
 ```
-Then run the client with
-```
-python -m SimpleHttpClient
-```
-navigate to
-```
-localhost:8000
-```
+
+## Client
+[link](https://github.com/SpanishArmada/mmopm-client)
