@@ -34,6 +34,8 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             list_of_clients.append([self, counter])
             while(True):
                 extra = max((len(GE.get_players()) - 1), 0) * 15
+                if(extra >= 100):
+                    extra = 100
                 player_x = randint(270, 300 + extra)
                 player_y = randint(270, 290 + extra)
                 current_grid = GE.arena.get_grid(player_x, player_y) 
