@@ -2,6 +2,7 @@ import tornado.ioloop
 import tornado.web
 import tornado.websocket
 import json
+import os
 from GameEngine import GameEngine
 from random import randint
 from tornado.ioloop import PeriodicCallback
@@ -237,5 +238,5 @@ if __name__ == "__main__":
     callback = PeriodicCallback(update_client, 300)
     callback.start()
     app = make_app()
-    app.listen(8888)
+    app.listen(os.environ.get("PORT", 8888))
     tornado.ioloop.IOLoop.current().start()
