@@ -40,16 +40,18 @@ class GameEngine:
         players_to_delete = []
         for player in self.players.values():
             if player.is_dead:
-                players_to_delete.append(player)
-        for player in players_to_delete:
-            self.delete_player(player.id)
+                players_to_delete.append(player.id)
+        
+        for pid in players_to_delete:
+            self.delete_player(pid)
 
-        ghost_to_delete = []
+        ghosts_to_delete = []
         for ghost in self.ghosts.values():
             if ghost.is_dead:
-                ghost_to_delete.append(ghost)
-        for ghost in ghost_to_delete:
-            self.delete_ghost(ghost.id)
+                ghost_to_delete.append(ghost.id)
+        
+        for gid in ghosts_to_delete:
+            self.delete_ghost(gid)
 
         self.arena.late_update()
 
