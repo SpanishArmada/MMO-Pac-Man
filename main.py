@@ -33,8 +33,9 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             counter += 1
             list_of_clients.append([self, counter])
             while(True):
-                player_x = randint(270, 320)
-                player_y = randint(270, 320)
+                extra = max((len(GE.get_players()) - 1), 0) * 15
+                player_x = randint(270, 300 + extra)
+                player_y = randint(270, 290 + extra)
                 current_grid = GE.arena.get_grid(player_x, player_y) 
                 if(current_grid.get_type() != 4 and len(current_grid.get_objects_on_top()) == 0):
                     break
@@ -111,7 +112,6 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                     global list_of_clients
                     for i in list_of_clients:
                         if(i[0] == self):
-                            self.callback.stop()
                             list_of_clients.remove(i)
                             break
                     data = {"type": 2}
@@ -135,7 +135,6 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                 global list_of_clients
                 for i in list_of_clients:
                     if(i[0] == self):
-                        self.callback.stop()
                         list_of_clients.remove(i)
                         break
 
@@ -166,6 +165,9 @@ def update_client():
                 p = player
                 break
         if(p == None):
+            data = {"type": 2}
+            d[0].write_message(data)
+            d[0].on_close()
             continue
         row = p.get_y()
         col = p.get_x()
