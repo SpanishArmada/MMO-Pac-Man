@@ -1,6 +1,6 @@
 import random
 from Grid import Grid
-import Player
+from Player import Player
 
 class Ghost:
     def __init__(self, game_engine, id, ghost_type, x, y):
