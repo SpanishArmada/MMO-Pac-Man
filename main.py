@@ -6,6 +6,9 @@ import os
 from GameEngine import GameEngine
 from random import randint
 from tornado.ioloop import PeriodicCallback
+from tornado.options import define, options, parse_command_line
+
+define("port", default=8888, help="run on the given port", type=int)
 
 list_of_clients = []
 players = []
@@ -220,6 +223,7 @@ def update_client():
         d[0].write_message(data)
 
 if __name__ == "__main__":
+    parse_command_line()
     GE = GameEngine()
     
     ghost_counter = 1
@@ -238,5 +242,6 @@ if __name__ == "__main__":
     callback = PeriodicCallback(update_client, 300)
     callback.start()
     app = make_app()
-    app.listen(os.environ.get("PORT", 8888))
+    print("listening on port %d" % options.port)
+    app.listen(options.port)
     tornado.ioloop.IOLoop.current().start()
