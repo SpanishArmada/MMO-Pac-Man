@@ -44,7 +44,7 @@ class Arena:
         
         for i in range(1, self.height, 3):
             for j in range(1, self.width, 3):
-                self[i, j].set_type(Grid.EMPTY)
+                self[j, i].set_type(Grid.EMPTY)
                 
                 vertex_mapper[next_vid] = j, i
                 inverse_mapper[j, i] = next_vid
@@ -91,7 +91,7 @@ class Arena:
 
             for j in range(x, next_x + 1):
                 for i in range(y, next_y + 1):
-                    self[i, j].set_type(Grid.EMPTY)
+                    self[j, i].set_type(Grid.EMPTY)
 
         n_random = self.width + self.height
         for a, b in edge_list:
@@ -109,14 +109,14 @@ class Arena:
 
             for j in range(x, next_x + 1):
                 for i in range(y, next_y + 1):
-                    self[i, j].set_type(Grid.EMPTY)
+                    self[j, i].set_type(Grid.EMPTY)
         
         for i in range(self.height):
             for j in range(self.width):
-                if self[i, j].get_type() == Grid.EMPTY:
-                    self[i, j].set_type(Grid.PILL)
+                if self[j, i].get_type() == Grid.EMPTY:
+                    self[j, i].set_type(Grid.PILL)
                     if random.random() < self.__init_pup_chance:
-                        self[i, j].set_type(Grid.POWER_UP)
+                        self[j, i].set_type(Grid.POWER_UP)
         
         return True
 
@@ -141,14 +141,14 @@ class Arena:
 
             for i in range(1, self.height):
                 for j in range(1, self.width):
-                    if self[i, j].get_type() != Grid.EMPTY:
+                    if self[j, i].get_type() != Grid.EMPTY:
                         continue
 
                     r = random.random()
                     if r < self.__power_up_spawn_chance:
-                        self[i, j].set_type(Grid.POWER_UP)
+                        self[j, i].set_type(Grid.POWER_UP)
                     elif r < self.__pill_spawn_chance:
-                        self[i, j].set_type(Grid.PILL)
+                        self[j, i].set_type(Grid.PILL)
 
         else:
             self.__next_update = self.__next_update - 1
