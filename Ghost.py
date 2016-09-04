@@ -58,10 +58,10 @@ class Ghost:
                         self.is_dead = True
                 else:
                     if obj.has_moved:
-                        print('Player %d killed!' % obj.id)
+                        # print('Player %d killed!' % obj.id)
                         obj.is_dead = True
                     elif obj_new_x == next_x and obj_new_y == next_y or obj_new_x == self.x and obj_new_y == self.y:
-                        print('Player %d killed!' % obj.id)
+                        # print('Player %d killed!' % obj.id)
                         obj.is_dead = True
 
         arena.move(self, next_x, next_y)
