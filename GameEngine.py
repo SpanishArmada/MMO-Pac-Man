@@ -1,8 +1,6 @@
 from Arena import Arena
 from Player import Player
 from Ghost import Ghost
-from threading import Timer
-import random
 
 class GameEngine:
     def __init__(self, arena_width=501, arena_height=501, max_num_ghost=35000):
@@ -15,26 +13,19 @@ class GameEngine:
         self.ghosts = {}
 
         self.__sec_per_tick = .5
-        # self.__timer = Timer(self.__sec_per_tick, self.update)
 
     def update(self):
-        # self.__timer = Timer(self.__sec_per_tick, self.update)
-        # self.__timer.start()
         
         for player in self.players.values():
-            # print("Gede")
             player.early_update()
         
         for ghost in self.ghosts.values():
-            # print("Bagus")
             ghost.early_update()
 
         for player in self.players.values():
-            # print("Bayu")
             player.update()
 
         for ghost in self.ghosts.values():
-            # print("Pentium")
             ghost.update()
 
         players_to_delete = []
@@ -48,18 +39,12 @@ class GameEngine:
         ghosts_to_delete = []
         for ghost in self.ghosts.values():
             if ghost.is_dead:
-                ghost_to_delete.append(ghost.id)
+                ghosts_to_delete.append(ghost.id)
         
         for gid in ghosts_to_delete:
             self.delete_ghost(gid)
 
         self.arena.late_update()
-
-    # def start(self):
-    #     self.__timer.start()
-
-    # def stop(self):
-    #     self.__timer.cancel()
 
     def get_arena(self):
         return self.arena

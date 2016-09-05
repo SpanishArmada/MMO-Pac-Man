@@ -1,5 +1,5 @@
-from Grid import Grid
 import random
+from Grid import Grid
 
 class Arena:
 
@@ -24,7 +24,6 @@ class Arena:
         self.__pill_spawn_chance = self.__power_up_spawn_chance + 0.60
         self.__init_pup_chance = 0.001
         self.generate()
-        #print("done")
         # self.__emptied_grids = {}
         
 
