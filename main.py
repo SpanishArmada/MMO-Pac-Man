@@ -54,9 +54,10 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
 
     def on_message(self, msg):
         global counter
+        global list_of_clients
         incoming_data = json.loads(msg)
         msg_type = incoming_data["type"]
-        
+
         if(msg_type == 0):
             player_id = incoming_data["player_id"]
             player_name = incoming_data["player_name"]
@@ -115,7 +116,6 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                 
                 if(p.is_dead):
                     # GE.delete_player(p.get_id())
-                    global list_of_clients
                     for i in list_of_clients:
                         if(i[0] == self):
                             list_of_clients.remove(i)
@@ -138,7 +138,7 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                 if not p.is_dead:
                     GE.delete_player(p.get_id())
 
-                global list_of_clients
+                
                 for i in list_of_clients:
                     if(i[0] == self):
                         list_of_clients.remove(i)
@@ -159,10 +159,10 @@ def make_app():
     ])
 
 def update_client():
-    GE.update()
 
     global list_of_clients
     global GE
+    GE.update()
     for d in list_of_clients:
         player_id = d[1]
         p = None
